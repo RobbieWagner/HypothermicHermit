@@ -1,0 +1,6 @@
+[submodule "Assets/HypothermicHermitRestricted"]
+	path = Assets/HypothermicHermitRestricted
+	url = https://github.com/RobbieWagner/HypothermicHermitRestricted.git
+[submodule "Assets/restricted"]
+	path = Assets/restricted
+	url = https://github.com/RobbieWagner/HypothermicHermitRestricted.git
