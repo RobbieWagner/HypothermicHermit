@@ -11,10 +11,6 @@ public class PlayerMovement : MonoBehaviour
 
     Vector2 moveDirection;
 
-    float horizontal;
-    float vertical;
-    float moveLimiter = 0.7f;
-
     private float movementSpeed;
     public float defaultWalkSpeed = 3f;
     private float currentWalkSpeed;
@@ -26,7 +22,6 @@ public class PlayerMovement : MonoBehaviour
     [HideInInspector] public bool hasRecentlyMoved;
 
     [SerializeField] public MovementSounds movementSounds;
-
 
     void Start() 
     {
