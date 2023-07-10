@@ -100,7 +100,11 @@ public class PlayerMovement : MonoBehaviour
         }
     }
 
-    private void FixedUpdate() => body.velocity = new Vector2(moveDirection.x * movementSpeed, moveDirection.y * movementSpeed);
+    private void FixedUpdate()
+    {
+        if(Manager.Instance.GameState == (int) GameStateEnum.explore)
+        body.velocity = new Vector2(moveDirection.x * movementSpeed, moveDirection.y * movementSpeed);
+    }
 
     public void ChangePlayerSpeed(float newWalkSpeed, float newRunSpeed)
     {
