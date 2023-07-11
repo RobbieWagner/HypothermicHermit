@@ -21,6 +21,6 @@ public class Player : Unit
 
     public override void AddUnitToGrid()
     {
-        transform.position = GameGrid.Instance.GetTilePosition(transform);
+        
     }
 }

@@ -25,6 +25,7 @@ public class Combat : MonoBehaviour
 
     public void InitalizeCombat()
     {
+        Manager.Instance.GameState = (int) GameStateEnum.combat;
         BattleGridManager.Instance.CreateBattleGrid();
     }
 

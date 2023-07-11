@@ -12,7 +12,10 @@ public enum GameStateEnum
 public class Manager : MonoBehaviour
 {
 
-    [SerializeField] Combat combatPrefab;
+    [SerializeField] private Combat combatPrefab;
+    [SerializeField] public float enemyNoticeRange;
+    [SerializeField] public LayerMask unitLM;
+    [SerializeField] public LayerMask playerLM;
 
     private int gameState;
     public int GameState
@@ -29,6 +32,9 @@ public class Manager : MonoBehaviour
         }
     }
 
+    public delegate void OnGameStateChangeDelegate(int state);
+    public event OnGameStateChangeDelegate OnGameStateChange;
+
     public static Manager Instance {get; private set;}
     private void Awake() 
     {
@@ -44,9 +50,6 @@ public class Manager : MonoBehaviour
         GameState = (int) GameStateEnum.explore;
         OnGameStateChange += CreateNewCombat;
     }
-
-    public delegate void OnGameStateChangeDelegate(int state);
-    public event OnGameStateChangeDelegate OnGameStateChange;
 
     public void CreateNewCombat(int state)
     {

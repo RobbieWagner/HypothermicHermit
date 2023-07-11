@@ -1,17 +1,25 @@
 using System;
+using System.Linq;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+
+public enum UnitMoveRanks
+{
+    Obstacle,
+    Player,
+    Ally,
+    Enemy
+}
 
 public class BattleGridManager : MonoBehaviour
 {
 
     public float startingDistanceFromEnemies;
     [SerializeField] private Vector2 gridSize;
-    [SerializeField] private LayerMask unitLM;
 
-    //[HideInInspector] 
-    private List<Unit> gridUnits; 
+    [SerializeField]
+    private List<Unit> gridUnits;
 
     public static BattleGridManager Instance {get; private set;}
     private void Awake() 
@@ -24,6 +32,8 @@ public class BattleGridManager : MonoBehaviour
         { 
             Instance = this; 
         } 
+
+        gridUnits = new List<Unit>();
     }
 
     public void CreateBattleGrid()
@@ -31,54 +41,68 @@ public class BattleGridManager : MonoBehaviour
         gridUnits.Clear();
         Vector2 playerPosition = GameGrid.Instance.GetTilePosition(Player.Instance.transform);
 
-        RaycastHit2D[] hits = Physics2D.BoxCastAll(playerPosition, gridSize, 0, Vector2.down, Mathf.Infinity, unitLM);
+        RaycastHit2D[] hits = Physics2D.BoxCastAll(playerPosition, gridSize, 0, Vector2.down, Mathf.Infinity, Manager.Instance.unitLM);
         gridUnits = new List<Unit>();
         foreach(RaycastHit2D hit in hits)
         {
-            gridUnits.Add(hit.collider.GetComponent<Unit>());
+            Unit newUnit = hit.collider.GetComponent<Unit>();
+            if(!gridUnits.Contains(newUnit)) gridUnits.Add(newUnit);
         }
 
-        foreach(Unit unit in gridUnits)
-        {
-            unit.AddUnitToGrid();
-        }
-        MoveStackedUnits();
+        gridUnits = gridUnits.OrderBy(unit => FindUnitMoveRank(unit)).ToList();
+        MoveStackedUnits(gridUnits);
     }
 
-    public void MoveStackedUnits()
+    public void MoveStackedUnits(List<Unit> units)
     {
-        bool movedUnits = true;
-        while(movedUnits)
+        List<Vector2> unitPositions = new List<Vector2>();
+
+        for(int i = 0; i < units.Count; i++)
         {
-            movedUnits = false;
-            for(int i = 0; i < gridUnits.Count-1; i++)
+            Unit unit = units[i];
+            Vector2 unitPosition = GameGrid.Instance.GetTilePosition(unit.transform);
+            if(FindUnitMoveRank(unit) != (int)UnitMoveRanks.Obstacle && unitPositions.Contains(unitPosition))
             {
-                for(int j = i + 1; j < gridUnits.Count; j++)
-                {
-                    Unit unitI = gridUnits[i];
-                    Unit unitJ = gridUnits[j];
-
-                    if(unitI.transform.position.Equals(unitJ.transform.position))
-                    {
-                        if(isMovableUnit(unitI) || isMovableUnit(unitJ))
-                        {
-                            if(!isMovableUnit(unitI))
-                            {
-                                //move unitJ, set movedUnits to true
-                            }
-                            else if(!isMovableUnit(unitJ))
-                            {
-                                //move unitI, set movedUnits to true
-                            }
-                        }
-                    }
-                }
+                unitPosition = GameGrid.Instance.GetTilePosition(FindClosestNearbyTile(unit));
             }
+
+            unit.transform.position = unitPosition;
+            unitPositions.Add(unitPosition);
         }
     }
 
-    public bool isMovableUnit(Unit unit)
+    public int FindUnitMoveRank(Unit unit)
     {
-        return !!unit.GetType().Equals(typeof(Obstacle)) && !unit.GetType().Equals(typeof(Player));
+        Type unitType = unit.GetType();
+        if(unitType.Equals(typeof(Obstacle))) return (int) UnitMoveRanks.Obstacle;
+        else if(unitType.Equals(typeof(Ally))) return (int) UnitMoveRanks.Ally;
+        else if(unitType.Equals(typeof(Player))) return (int) UnitMoveRanks.Player;
+        else return (int) UnitMoveRanks.Enemy;
+    }
+
+    //finds the best blank spot available for the unit
+    public Vector2 FindClosestNearbyTile(Unit unit)
+    {
+        float posX = (float)(unit.transform.position.x - Math.Truncate(unit.transform.position.x));
+        float posY = (float)(unit.transform.position.y - Math.Truncate(unit.transform.position.y));
+
+        Debug.Log("hello?");
+
+        // if(Math.Abs(.5 - posX) < .2 && Math.Abs(.5 - posY) < .2)
+        // {
+        //     if(posX > .5f && posY > .5f) return unit.transform.position + Vector3.up + Vector3.right;
+        //     else if(posX > .5f && posY <= .5f) return unit.transform.position + Vector3.down + Vector3.right;
+        //     else if(posY > .5f) return unit.transform.position + Vector3.up + Vector3.left;
+        //     else return unit.transform.position + Vector3.down + Vector3.left;
+        // }
+
+        if(Math.Abs(.5 - posY) > Math.Abs(.5 - posX))
+        {
+            if(posY > .5) return unit.transform.position + Vector3.up;
+            return unit.transform.position + Vector3.down;
+        }
+
+        if(posX > .5) return unit.transform.position + Vector3.right;
+        return unit.transform.position + Vector3.left;
     }
 }

@@ -104,6 +104,7 @@ public class PlayerMovement : MonoBehaviour
     {
         if(Manager.Instance.GameState == (int) GameStateEnum.explore)
         body.velocity = new Vector2(moveDirection.x * movementSpeed, moveDirection.y * movementSpeed);
+        else body.velocity = Vector2.zero;
     }
 
     public void ChangePlayerSpeed(float newWalkSpeed, float newRunSpeed)
