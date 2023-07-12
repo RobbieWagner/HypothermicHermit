@@ -12,7 +12,6 @@ public enum GameStateEnum
 public class Manager : MonoBehaviour
 {
 
-    [SerializeField] private Combat combatPrefab;
     [SerializeField] public float enemyNoticeRange;
     [SerializeField] public LayerMask unitLM;
     [SerializeField] public LayerMask playerLM;
@@ -29,6 +28,7 @@ public class Manager : MonoBehaviour
             if(value == gameState) return;
             gameState = value;
             if(OnGameStateChange != null) OnGameStateChange(gameState);
+            Debug.Log(value.ToString());
         }
     }
 
@@ -48,16 +48,5 @@ public class Manager : MonoBehaviour
         } 
 
         GameState = (int) GameStateEnum.explore;
-        OnGameStateChange += CreateNewCombat;
-    }
-
-    public void CreateNewCombat(int state)
-    {
-        GameObject combatGO = Instantiate(combatPrefab.gameObject);
-    }
-
-    public void CreateNewCombat(Combat combat)
-    {
-
     }
 }

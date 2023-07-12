@@ -3,6 +3,7 @@ using System.Linq;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Tilemaps;
 
 public enum UnitMoveRanks
 {
@@ -19,7 +20,9 @@ public class BattleGridManager : MonoBehaviour
     [SerializeField] private Vector2 gridSize;
 
     [SerializeField]
-    private List<Unit> gridUnits;
+    private List<IUnit> gridUnits;
+
+    [SerializeField] Tilemap combatGrid;
 
     public static BattleGridManager Instance {get; private set;}
     private void Awake() 
@@ -33,8 +36,16 @@ public class BattleGridManager : MonoBehaviour
             Instance = this; 
         } 
 
-        gridUnits = new List<Unit>();
+        gridUnits = new List<IUnit>();
+
+        CombatManager.Instance.OnCreateNewCombat += TurnGridOn;
+        CombatManager.Instance.OnCreateNewCombat += CreateBattleGrid;
+        CombatManager.Instance.OnEndCombat += TurnGridOff;
+        combatGrid.gameObject.SetActive(false);
     }
+
+    private void TurnGridOn(){combatGrid.gameObject.SetActive(true);}
+    private void TurnGridOff(){combatGrid.gameObject.SetActive(false);}
 
     public void CreateBattleGrid()
     {
@@ -42,24 +53,32 @@ public class BattleGridManager : MonoBehaviour
         Vector2 playerPosition = GameGrid.Instance.GetTilePosition(Player.Instance.transform);
 
         RaycastHit2D[] hits = Physics2D.BoxCastAll(playerPosition, gridSize, 0, Vector2.down, Mathf.Infinity, Manager.Instance.unitLM);
-        gridUnits = new List<Unit>();
+        gridUnits = new List<IUnit>();
         foreach(RaycastHit2D hit in hits)
         {
-            Unit newUnit = hit.collider.GetComponent<Unit>();
+            IUnit newUnit = hit.collider.GetComponent<IUnit>();
             if(!gridUnits.Contains(newUnit)) gridUnits.Add(newUnit);
         }
 
         gridUnits = gridUnits.OrderBy(unit => FindUnitMoveRank(unit)).ToList();
+        CombatManager.Instance.characters = gridUnits.OfType<Character>().ToList();
+        CombatManager.Instance.obstacles = gridUnits.OfType<Obstacle>().ToList();
         MoveStackedUnits(gridUnits);
+
+        OnBattleGridCreated();
     }
 
-    public void MoveStackedUnits(List<Unit> units)
+    public delegate void CreateBattleGridDelegate();
+    public CreateBattleGridDelegate OnBattleGridCreated;
+
+
+    public void MoveStackedUnits(List<IUnit> units)
     {
         List<Vector2> unitPositions = new List<Vector2>();
 
         for(int i = 0; i < units.Count; i++)
         {
-            Unit unit = units[i];
+            IUnit unit = units[i];
             Vector2 unitPosition = GameGrid.Instance.GetTilePosition(unit.transform);
             if(FindUnitMoveRank(unit) != (int)UnitMoveRanks.Obstacle && unitPositions.Contains(unitPosition))
             {
@@ -71,7 +90,7 @@ public class BattleGridManager : MonoBehaviour
         }
     }
 
-    public int FindUnitMoveRank(Unit unit)
+    public int FindUnitMoveRank(IUnit unit)
     {
         Type unitType = unit.GetType();
         if(unitType.Equals(typeof(Obstacle))) return (int) UnitMoveRanks.Obstacle;
@@ -81,7 +100,7 @@ public class BattleGridManager : MonoBehaviour
     }
 
     //finds the best blank spot available for the unit
-    public Vector2 FindClosestNearbyTile(Unit unit)
+    public Vector2 FindClosestNearbyTile(IUnit unit)
     {
         float posX = (float)(unit.transform.position.x - Math.Truncate(unit.transform.position.x));
         float posY = (float)(unit.transform.position.y - Math.Truncate(unit.transform.position.y));

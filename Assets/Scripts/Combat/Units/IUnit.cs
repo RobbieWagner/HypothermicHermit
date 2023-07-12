@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using System;
 
-public class Unit : MonoBehaviour
+public class IUnit : MonoBehaviour
 {
     public virtual void AddUnitToGrid()
     {

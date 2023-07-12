@@ -4,10 +4,10 @@ using UnityEngine;
 using System;
 
 //Defines an enemy to fight in Combats
-public class Enemy : Unit
+public class Enemy : Character
 {
     public override void AddUnitToGrid()
     {
-        Combat.Instance.combatEnemies.Add(this);
+        //Combat.Instance.combatEnemies.Add(this);
     }
 }

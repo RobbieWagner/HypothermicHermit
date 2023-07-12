@@ -3,9 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using System;
 
-public class Player : Unit
+public class Player : Character
 {
-
     public static Player Instance {get; private set;}
 
     private void Awake() {
