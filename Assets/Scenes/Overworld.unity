@@ -449,7 +449,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 54e9add7eec0b0f4688f73360a5c3b48, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  healthBar: {fileID: 0}
   EnemyCombatTrigger: {fileID: 345792895}
   sightDistance: 8
 --- !u!212 &345792893
@@ -669,6 +668,50 @@ MonoBehaviour:
   gridSize: {x: 32, y: 18}
   gridUnits: []
   combatGrid: {fileID: 1727533881}
+--- !u!1 &456183995
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 456183996}
+  - component: {fileID: 456183997}
+  m_Layer: 3
+  m_Name: Clickable
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &456183996
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 456183995}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 470122473}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &456183997
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 456183995}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7c659c24f270cff4e9d4a4e062e0591a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &470122471
 GameObject:
   m_ObjectHideFlags: 0
@@ -752,7 +795,8 @@ Transform:
   m_LocalPosition: {x: 8.8, y: 7.47, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
-  m_Children: []
+  m_Children:
+  - {fileID: 456183996}
   m_Father: {fileID: 0}
   m_RootOrder: 6
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -768,7 +812,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 54e9add7eec0b0f4688f73360a5c3b48, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  healthBar: {fileID: 0}
   EnemyCombatTrigger: {fileID: 470122476}
   sightDistance: 8
 --- !u!58 &470122476
@@ -16146,10 +16189,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   cursorSprites:
   - {fileID: 21300000, guid: 585e1eab7bcfb6c449b5630378f86576, type: 3}
-  - {fileID: 21300000, guid: 585e1eab7bcfb6c449b5630378f86576, type: 3}
-  - {fileID: 21300000, guid: 585e1eab7bcfb6c449b5630378f86576, type: 3}
-  - {fileID: 21300000, guid: 585e1eab7bcfb6c449b5630378f86576, type: 3}
+  - {fileID: 21300000, guid: 5767afd801b365346abc29b6a67422ff, type: 3}
+  - {fileID: 21300000, guid: df1ad8548b2b42c41b6f7575da954c48, type: 3}
+  - {fileID: 21300000, guid: 75c6de9bb3fc082449e0445c5b3161a9, type: 3}
   cursorImage: {fileID: 698655157}
+  clickables: []
 --- !u!4 &1329259168
 Transform:
   m_ObjectHideFlags: 0

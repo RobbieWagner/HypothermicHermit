@@ -6,8 +6,6 @@ using UnityEngine.UI;
 public class Character : IUnit
 {
 
-    [HideInInspector] public Slider healthBar;
-
     // Start is called before the first frame update
     void Start()
     {

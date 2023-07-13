@@ -57,7 +57,7 @@ public class BattleGridManager : MonoBehaviour
         foreach(RaycastHit2D hit in hits)
         {
             IUnit newUnit = hit.collider.GetComponent<IUnit>();
-            if(!gridUnits.Contains(newUnit)) gridUnits.Add(newUnit);
+            if(newUnit != null && !gridUnits.Contains(newUnit)) gridUnits.Add(newUnit);
         }
 
         gridUnits = gridUnits.OrderBy(unit => FindUnitMoveRank(unit)).ToList();
@@ -104,8 +104,6 @@ public class BattleGridManager : MonoBehaviour
     {
         float posX = (float)(unit.transform.position.x - Math.Truncate(unit.transform.position.x));
         float posY = (float)(unit.transform.position.y - Math.Truncate(unit.transform.position.y));
-
-        Debug.Log("hello?");
 
         // if(Math.Abs(.5 - posX) < .2 && Math.Abs(.5 - posY) < .2)
         // {

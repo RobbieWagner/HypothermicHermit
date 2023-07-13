@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-public class PlayerMovement : MonoBehaviour
+public class PlayerExplorationMovement : MonoBehaviour
 {
     [SerializeField] Rigidbody2D body;
     [SerializeField] Animator animator;

@@ -28,7 +28,6 @@ public class Manager : MonoBehaviour
             if(value == gameState) return;
             gameState = value;
             if(OnGameStateChange != null) OnGameStateChange(gameState);
-            Debug.Log(value.ToString());
         }
     }
 

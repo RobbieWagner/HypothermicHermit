@@ -17,10 +17,10 @@ public class OverworldEnemy : Enemy
 
     private void FixedUpdate() 
     {
-        if(canSeePlayer)
+        if(canSeePlayer && Combat.Instance == null)
         {
             RaycastHit2D hit = Physics2D.Linecast(transform.position, Vector2.MoveTowards(transform.position, Player.Instance.transform.position, sightDistance), Manager.Instance.playerLM); 
-            if(hit.collider != null && hit.collider.gameObject.CompareTag("Player") && Combat.Instance == null)
+            if(hit.collider != null && hit.collider.gameObject.CompareTag("Player"))
             {
                 if(Manager.Instance.GameState != (int) GameStateEnum.combat)
                 {

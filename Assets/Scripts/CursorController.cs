@@ -19,6 +19,10 @@ public class CursorController : MonoBehaviour
 
     Vector2 pos;
 
+    public List<Clickable> clickables;
+
+    [SerializeField] public int restingCursorState;
+
     private int cursorState;
     public int CursorState
     {
@@ -51,6 +55,8 @@ public class CursorController : MonoBehaviour
         } 
 
         OnCursorStateChange += ChangeCursorImage;
+
+        clickables = new List<Clickable>();
     }
 
     private void FixedUpdate() 
@@ -61,5 +67,22 @@ public class CursorController : MonoBehaviour
     private void ChangeCursorImage(int state)
     {
         cursorImage.sprite = cursorSprites[state];
+    }
+
+    public void AddClickable(Clickable clickable)
+    {
+        clickables.Add(clickable);
+        clickables[0].UpdateClickableState();
+    }
+
+    public void RemoveClickable(Clickable clickable)
+    {
+        clickables.Remove(clickable);
+        if(clickables.Count > 0) clickables[0].UpdateClickableState();
+        else 
+        {
+            Debug.Log("hi");
+            CursorState = restingCursorState;
+        }
     }
 }
