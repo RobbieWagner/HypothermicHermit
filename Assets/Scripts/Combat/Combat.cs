@@ -30,7 +30,7 @@ public class Combat : MonoBehaviour
         canvas.worldCamera = Camera.main;
 
         CombatManager.Instance.OnEndCombat += EndCombat;
-        BattleGridManager.Instance.OnBattleGridCreated += InitalizeCombat;
+        BattleGrid.Instance.OnBattleGridCreated += InitalizeCombat;
     }
 
     public void InitalizeCombat()

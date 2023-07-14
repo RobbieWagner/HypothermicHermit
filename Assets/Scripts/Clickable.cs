@@ -16,6 +16,7 @@ public class Clickable : MonoBehaviour, IPointerEnterHandler, IPointerExitHandle
     protected virtual void OnPointerExit()
     {
         CursorController.Instance.RemoveClickable(this);
+        Debug.Log("hi");
     }
 
     protected virtual void OnPointerDown()

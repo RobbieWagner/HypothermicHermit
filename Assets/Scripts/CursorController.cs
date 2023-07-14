@@ -20,6 +20,7 @@ public class CursorController : MonoBehaviour
     Vector2 pos;
 
     public List<Clickable> clickables;
+    private Clickable selectedAlly;
 
     [SerializeField] public int restingCursorState;
 
@@ -84,5 +85,18 @@ public class CursorController : MonoBehaviour
             Debug.Log("hi");
             CursorState = restingCursorState;
         }
+    }
+
+    public void SetSelectedClickable(Clickable clickable)
+    {
+        selectedAlly = clickable;
+        Debug.Log("hi");
+        CursorState = (int) GameCursorState.move_state;
+    }
+
+    public void UnsetSelectedClickable()
+    {
+        selectedAlly = null;
+        CursorState = (int) GameCursorState.default_state;
     }
 }

@@ -13,18 +13,23 @@ public enum UnitMoveRanks
     Enemy
 }
 
-public class BattleGridManager : MonoBehaviour
+public class BattleGrid : MonoBehaviour
 {
+    [SerializeField] private float CELL_SIZE = 1;
+    private float BORDER_SIZE = 5;
+    [SerializeField] private Vector3 TILE_OFFSET;
 
-    public float startingDistanceFromEnemies;
     [SerializeField] private Vector2 gridSize;
 
     [SerializeField]
     private List<IUnit> gridUnits;
 
-    [SerializeField] Tilemap combatGrid;
+    [SerializeField] private CombatTile combatTilePrefab;
+    [SerializeField] private CombatBorderTile borderTilePrefab;
+    [SerializeField] private Transform gridParent;  
+    private List<List<CombatTile>> tileGrid;
 
-    public static BattleGridManager Instance {get; private set;}
+    public static BattleGrid Instance {get; private set;}
     private void Awake() 
     {
         if (Instance != null && Instance != this) 
@@ -37,17 +42,55 @@ public class BattleGridManager : MonoBehaviour
         } 
 
         gridUnits = new List<IUnit>();
+        tileGrid = new List<List<CombatTile>>();
 
-        CombatManager.Instance.OnCreateNewCombat += TurnGridOn;
         CombatManager.Instance.OnCreateNewCombat += CreateBattleGrid;
-        CombatManager.Instance.OnEndCombat += TurnGridOff;
-        combatGrid.gameObject.SetActive(false);
+        CombatManager.Instance.OnEndCombat += DestroyBattleGrid;
     }
 
-    private void TurnGridOn(){combatGrid.gameObject.SetActive(true);}
-    private void TurnGridOff(){combatGrid.gameObject.SetActive(false);}
+    //Instantiate units, then display the grid based off combat units
+    private void CreateBattleGrid()
+    {
+        AddGridUnits();
 
-    public void CreateBattleGrid()
+        float border = CELL_SIZE * BORDER_SIZE;
+        Vector3 centerOfGrid = Player.Instance.transform.position;
+
+        float minXPos = (float) (centerOfGrid.x - border - (.5 * gridSize.x));
+        float minYPos = (float) (centerOfGrid.y - border - (.5 * gridSize.y));
+        float maxXPos = (float) (centerOfGrid.x + border + (.5 * gridSize.x));
+        float maxYPos = (float) (centerOfGrid.y + border + (.5 * gridSize.y));
+
+        for(float i = minXPos; i <= maxXPos; i += CELL_SIZE)
+        {
+            List<CombatTile> rowTiles = new List<CombatTile>();
+
+            for(float j = minYPos; j <= maxYPos; j += CELL_SIZE)
+            {
+                GameObject newTile;
+                if(i < minXPos + border - 1 || i > maxXPos - border + 1|| j < minYPos + border - 1 || j > maxYPos - border + 1)
+                {
+                    newTile = Instantiate(borderTilePrefab.gameObject, gridParent);
+                }
+                else newTile = Instantiate(combatTilePrefab.gameObject, gridParent);
+
+                newTile.transform.position = new Vector3( i, j, 0) + TILE_OFFSET;
+
+                rowTiles.Add(newTile.GetComponent<CombatTile>());
+            }
+
+            tileGrid.Add(rowTiles);
+        }
+
+        TrackUnitPositions();
+    }
+
+    private void DestroyBattleGrid()
+    {
+        //destroy the grid, do something to the units?
+    }
+
+    private void AddGridUnits()
     {
         gridUnits.Clear();
         Vector2 playerPosition = GameGrid.Instance.GetTilePosition(Player.Instance.transform);
@@ -67,10 +110,9 @@ public class BattleGridManager : MonoBehaviour
 
         OnBattleGridCreated();
     }
-
+    
     public delegate void CreateBattleGridDelegate();
     public CreateBattleGridDelegate OnBattleGridCreated;
-
 
     public void MoveStackedUnits(List<IUnit> units)
     {
@@ -105,14 +147,6 @@ public class BattleGridManager : MonoBehaviour
         float posX = (float)(unit.transform.position.x - Math.Truncate(unit.transform.position.x));
         float posY = (float)(unit.transform.position.y - Math.Truncate(unit.transform.position.y));
 
-        // if(Math.Abs(.5 - posX) < .2 && Math.Abs(.5 - posY) < .2)
-        // {
-        //     if(posX > .5f && posY > .5f) return unit.transform.position + Vector3.up + Vector3.right;
-        //     else if(posX > .5f && posY <= .5f) return unit.transform.position + Vector3.down + Vector3.right;
-        //     else if(posY > .5f) return unit.transform.position + Vector3.up + Vector3.left;
-        //     else return unit.transform.position + Vector3.down + Vector3.left;
-        // }
-
         if(Math.Abs(.5 - posY) > Math.Abs(.5 - posX))
         {
             if(posY > .5) return unit.transform.position + Vector3.up;
@@ -121,5 +155,10 @@ public class BattleGridManager : MonoBehaviour
 
         if(posX > .5) return unit.transform.position + Vector3.right;
         return unit.transform.position + Vector3.left;
+    }
+
+    private void TrackUnitPositions()
+    {
+        //Keeps a dictionary of the units and the tile they are on
     }
 }
