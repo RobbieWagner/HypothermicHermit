@@ -20,19 +20,21 @@ public class GameGrid : MonoBehaviour
         } 
     }
 
-    public Vector2 GetTilePosition(Transform objectTransform)
+    public Vector2 GetTilePosition(Transform objectTransform, float scale)
     {
-        float posX = MathF.Truncate(objectTransform.position.x);
-        float posY = MathF.Truncate(objectTransform.position.y) + .25f;
+        float posX = (objectTransform.position.x) - (objectTransform.position.x % scale);
+        float posY = (objectTransform.position.y) - (objectTransform.position.y % scale) + scale/4;
+
+        //Debug.Log("GetTilePos" + posX + " " + posY);
 
         Vector2 position = new Vector2(posX, posY);
         return position;
     }
 
-    public Vector2 GetTilePosition(Vector2 vector)
+    public Vector2 GetTilePosition(Vector2 vector, float scale)
     {
-        float posX = MathF.Truncate(vector.x);
-        float posY = MathF.Truncate(vector.y) + .25f;
+        float posX = (vector.x) - (vector.x % scale);
+        float posY = (vector.y) - (vector.y % scale) + scale/4;
 
         Vector2 position = new Vector2(posX, posY);
         return position;

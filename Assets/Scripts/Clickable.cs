@@ -34,6 +34,7 @@ public class Clickable : MonoBehaviour, IPointerEnterHandler, IPointerExitHandle
 
     void IPointerEnterHandler.OnPointerEnter(PointerEventData data)
     {
+        Debug.Log("clickable");
         OnPointerEnter();
     }
 

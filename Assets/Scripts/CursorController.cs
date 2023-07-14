@@ -74,6 +74,8 @@ public class CursorController : MonoBehaviour
     {
         clickables.Add(clickable);
         clickables[0].UpdateClickableState();
+        
+        Debug.Log(clickables.Count);
     }
 
     public void RemoveClickable(Clickable clickable)
