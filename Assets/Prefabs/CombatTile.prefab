@@ -111,7 +111,7 @@ BoxCollider2D:
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 0.85, y: 0.85}
+  m_Size: {x: 1.5, y: 1.5}
   m_EdgeRadius: 0
 --- !u!114 &5245528716252540200
 MonoBehaviour:
@@ -128,6 +128,7 @@ MonoBehaviour:
   clickableState: 0
   tileSpriteRenderer: {fileID: 5245528716252540202}
   tileCollider: {fileID: 5245528716252540203}
+  collidingUnits: []
 --- !u!114 &5363861790405615896
 MonoBehaviour:
   m_ObjectHideFlags: 0

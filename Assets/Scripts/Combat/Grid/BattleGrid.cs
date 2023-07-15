@@ -136,7 +136,6 @@ public class BattleGrid : MonoBehaviour
                     unitPosition = GameGrid.Instance.GetTilePosition(FindClosestNearbyTile(unit), CELL_SIZE);
                     attemptsToFindEmptyTile++;
                 }
-                Debug.Log(unitPosition.ToString() + " unit pos");
                 unit.MoveUnit(unitPosition);
             }
 
@@ -160,7 +159,7 @@ public class BattleGrid : MonoBehaviour
         float posY = (unit.transform.position.y) - (unit.transform.position.y % CELL_SIZE) + CELL_SIZE/4;
         float centerOfTile = .5f * CELL_SIZE;
 
-        Debug.Log("looking for nearby tile");
+        //Debug.Log("looking for nearby tile");
         Vector2 nearbyEmptyTile = new Vector2();
 
         if(Math.Abs(centerOfTile - posY) > Math.Abs(centerOfTile - posX))

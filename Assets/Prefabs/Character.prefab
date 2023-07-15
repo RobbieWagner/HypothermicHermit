@@ -241,10 +241,11 @@ GameObject:
   - component: {fileID: 4441096405913376302}
   - component: {fileID: 4441096405913376297}
   - component: {fileID: 4441096405913376296}
-  - component: {fileID: 4441096405913376298}
   - component: {fileID: 4441096405913376299}
   - component: {fileID: 4441096405913376293}
   - component: {fileID: 4441096405913376292}
+  - component: {fileID: 4441096405913376298}
+  - component: {fileID: 6812181367835592130}
   m_Layer: 6
   m_Name: Character
   m_TagString: Player
@@ -321,25 +322,6 @@ MonoBehaviour:
   m_DefaultActionMap: Movement
   m_SplitScreenIndex: -1
   m_Camera: {fileID: 0}
---- !u!114 &4441096405913376298
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4441096405913376303}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b1f6ce954d79a254598e5b236294f9e4, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  body: {fileID: 4441096405913376299}
-  animator: {fileID: 4441096405913376297}
-  defaultWalkSpeed: 3
-  defaultRunSpeed: 6
-  canMove: 1
-  hasRecentlyMoved: 0
-  movementSounds: {fileID: 4441096405200980247}
 --- !u!50 &4441096405913376299
 Rigidbody2D:
   serializedVersion: 4
@@ -399,6 +381,41 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c526747465204f8438f2095674f7c776, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  gridPosition: {x: 0, y: 0}
+  animator: {fileID: 0}
+  playerInitialCombatPosition: {x: 0, y: 0}
+--- !u!114 &4441096405913376298
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4441096405913376303}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b1f6ce954d79a254598e5b236294f9e4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  body: {fileID: 4441096405913376299}
+  animator: {fileID: 4441096405913376297}
+  defaultWalkSpeed: 3
+  defaultRunSpeed: 6
+  canMove: 1
+  hasRecentlyMoved: 0
+  movementSounds: {fileID: 4441096405200980247}
+--- !u!114 &6812181367835592130
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4441096405913376303}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d81c5ea1b5dc561488afcd808c367b16, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  animator: {fileID: 4441096405913376297}
 --- !u!1 &4441096406743524177
 GameObject:
   m_ObjectHideFlags: 0
