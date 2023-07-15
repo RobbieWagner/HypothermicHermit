@@ -519,7 +519,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_EventMask:
     serializedVersion: 2
-    m_Bits: 104
+    m_Bits: 232
   m_MaxRayIntersections: 1
 --- !u!1 &6386948340608679539
 GameObject:
@@ -578,7 +578,7 @@ BoxCollider2D:
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 0.85, y: 0.85}
+  m_Size: {x: 1.25, y: 1.25}
   m_EdgeRadius: 0
 --- !u!114 &2019814317965293908
 MonoBehaviour:
@@ -593,3 +593,4 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   clickableState: 0
+  unitComponent: {fileID: 4441096405913376292}

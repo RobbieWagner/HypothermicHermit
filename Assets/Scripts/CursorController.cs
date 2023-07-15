@@ -20,7 +20,7 @@ public class CursorController : MonoBehaviour
     Vector2 pos;
 
     public List<Clickable> clickables;
-    private Clickable selectedAlly;
+    public Clickable selectedClickable {get; private set;}
 
     [SerializeField] public int restingCursorState;
 
@@ -74,31 +74,27 @@ public class CursorController : MonoBehaviour
     {
         clickables.Add(clickable);
         clickables[0].UpdateClickableState();
-        
-        Debug.Log(clickables.Count);
     }
 
     public void RemoveClickable(Clickable clickable)
     {
         clickables.Remove(clickable);
         if(clickables.Count > 0) clickables[0].UpdateClickableState();
-        else 
+        else if(selectedClickable == null)
         {
-            Debug.Log("hi");
             CursorState = restingCursorState;
         }
     }
 
     public void SetSelectedClickable(Clickable clickable)
     {
-        selectedAlly = clickable;
-        Debug.Log("hi");
+        selectedClickable = clickable;
         CursorState = (int) GameCursorState.move_state;
     }
 
     public void UnsetSelectedClickable()
     {
-        selectedAlly = null;
+        selectedClickable = null;
         CursorState = (int) GameCursorState.default_state;
     }
 }

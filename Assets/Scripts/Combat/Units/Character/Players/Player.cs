@@ -5,6 +5,8 @@ using System;
 
 public class Player : Character
 {
+    [HideInInspector] public Vector2 playerInitialCombatPosition;
+
     public static Player Instance {get; private set;}
 
     private void Awake() {
@@ -21,5 +23,11 @@ public class Player : Character
     public override void AddUnitToGrid()
     {
         
+    }
+
+    public override void MoveUnit(Vector2 newPosition, float movementDuration = 1f)
+    {
+        playerInitialCombatPosition = newPosition;
+        base.MoveUnit(newPosition);
     }
 }

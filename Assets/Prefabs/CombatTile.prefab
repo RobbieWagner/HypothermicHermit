@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 5245528716252540203}
   - component: {fileID: 5245528716252540200}
   - component: {fileID: 5363861790405615896}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: CombatTile
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -127,6 +127,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   clickableState: 0
   tileSpriteRenderer: {fileID: 5245528716252540202}
+  tileCollider: {fileID: 5245528716252540203}
 --- !u!114 &5363861790405615896
 MonoBehaviour:
   m_ObjectHideFlags: 0

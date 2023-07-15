@@ -15,6 +15,7 @@ public enum movementState
 public class AllyCombatMovement : Clickable
 {
     private int unitState;
+    public IUnit unitComponent;
 
     private void Awake() 
     {
@@ -46,8 +47,8 @@ public class AllyCombatMovement : Clickable
         if(unitState == (int) movementState.hover)
         {
             unitState = (int) movementState.enabled;
-            base.OnPointerExit();
         }
+        base.OnPointerExit();
     }
 
     protected override void OnPointerDown()

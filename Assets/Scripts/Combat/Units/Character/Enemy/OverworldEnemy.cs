@@ -13,6 +13,8 @@ public class OverworldEnemy : Enemy
     {
         EnemyCombatTrigger.radius = Manager.Instance.enemyNoticeRange;    
         canSeePlayer = false;
+
+        CombatManager.Instance.OnCreateNewCombat += DisableEnemyCombatTriggers;
     }
 
     private void FixedUpdate() 
@@ -37,6 +39,12 @@ public class OverworldEnemy : Enemy
 
     private void OnTriggerExit2D(Collider2D other) 
     {
+        
         if(other.gameObject.CompareTag("Player")) canSeePlayer = false;
+    }
+
+    private void DisableEnemyCombatTriggers()
+    {
+        EnemyCombatTrigger.enabled = false;
     }
 }

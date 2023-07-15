@@ -16,25 +16,23 @@ public class Clickable : MonoBehaviour, IPointerEnterHandler, IPointerExitHandle
     protected virtual void OnPointerExit()
     {
         CursorController.Instance.RemoveClickable(this);
-        Debug.Log("hi");
     }
 
     protected virtual void OnPointerDown()
     {
         if(CursorController.Instance.clickables.Count > 0 && CursorController.Instance.clickables[0] == this)
         {
-            //Debug.Log("hi");
+            CursorController.Instance.SetSelectedClickable(this);
         }
     }
 
     public void UpdateClickableState()
     {
-        CursorController.Instance.CursorState = clickableState;
+        if(CursorController.Instance.selectedClickable == null) CursorController.Instance.CursorState = clickableState;
     }
 
     void IPointerEnterHandler.OnPointerEnter(PointerEventData data)
     {
-        Debug.Log("clickable");
         OnPointerEnter();
     }
 
