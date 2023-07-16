@@ -27,7 +27,6 @@ public class IUnit : MonoBehaviour
     public virtual void UseUnitMovement(Vector2 newPosition)
     {
         MoveUnit(newPosition);
-        //BattleGrid.Instance.ReenableTileClickables();
         OnMoveUnit(this);
     }
 
@@ -37,16 +36,17 @@ public class IUnit : MonoBehaviour
         StopAllCoroutines();
         StartMovementAnimation(newPosition);
         transform.DOMove(newPosition, movementDuration, false)
-            .OnComplete(StopMovementAnimation);
+            .OnComplete(StopMovement);
         gridPosition = newPosition;
     }
 
     public delegate void OnMoveUnitDelegate(IUnit unit);
     public event OnMoveUnitDelegate OnMoveUnit = delegate { };
 
-    private void StopMovementAnimation()
+    private void StopMovement()
     {
         animator.SetTrigger("combatStop");
+        BattleGrid.Instance.ReenableTileClickables();
     }
 
     private void StartMovementAnimation(Vector2 targetPosition)
