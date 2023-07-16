@@ -68,23 +68,27 @@ public class BattleGrid : MonoBehaviour
             float xCoord = i;
             List<CombatTile> rowTiles = new List<CombatTile>();
 
-            for(float j = minYPos - border; j < maxYPos + border; j += CELL_SIZE)
+            for(float j = minYPos - border + CELL_SIZE; j <= maxYPos + border; j += CELL_SIZE)
             {
                 float yCoord = j;
-                GameObject newTile;
-                if(xCoord < minXPos|| xCoord >= maxXPos|| yCoord < minYPos|| yCoord >= maxYPos)
+                GameObject tileGO;
+                if(xCoord < minXPos|| xCoord >= maxXPos|| yCoord < minYPos + CELL_SIZE|| yCoord > maxYPos)
                 {
-                    newTile = Instantiate(borderTilePrefab.gameObject, gridParent);
+                    tileGO = Instantiate(borderTilePrefab.gameObject, gridParent);
                 }
-                else newTile = Instantiate(combatTilePrefab.gameObject, gridParent);
+                else tileGO = Instantiate(combatTilePrefab.gameObject, gridParent);
 
-                newTile.transform.position = new Vector3( xCoord, yCoord, 0) + TILE_OFFSET;
-                newTile.name = "tile " + i + " " + j; 
+                tileGO.transform.position = new Vector3( xCoord, yCoord, 0) + TILE_OFFSET;
+                tileGO.name = "tile " + i + " " + j; 
 
-                rowTiles.Add(newTile.GetComponent<CombatTile>());
+                CombatTile tile = tileGO.GetComponent<CombatTile>();
+
+                rowTiles.Add(tileGO.GetComponent<CombatTile>());
+                tile.tileYPos = rowTiles.Count;
             }
 
             tileGrid.Add(rowTiles);
+            foreach(CombatTile tile in rowTiles) tile.tileXPos = tileGrid.Count;
         }
 
         TrackUnitPositions();
@@ -186,7 +190,7 @@ public class BattleGrid : MonoBehaviour
         return CELL_SIZE;
     }
 
-    public void ReenableTileClickables()
+    public void EnableTileColliders()
     {
         foreach(List<CombatTile> row in tileGrid)
         {

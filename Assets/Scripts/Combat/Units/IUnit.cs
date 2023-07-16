@@ -8,6 +8,25 @@ public class IUnit : MonoBehaviour
 {
     [HideInInspector] public Vector2 gridPosition;
     [SerializeField] private Animator animator;
+    [SerializeField] private int unitSpeed = 5;
+
+    public int tileXPos;
+    public int tileYPos;
+    
+    public int UnitSpeed
+    {
+        get {return unitSpeed;}
+        set
+        {
+            if(value == unitSpeed) return;
+            unitSpeed = value;
+        }
+    }
+
+    protected virtual void Awake() 
+    {
+        UnitSpeed = unitSpeed;
+    }
 
     public virtual void AddUnitToGrid()
     {
@@ -46,7 +65,7 @@ public class IUnit : MonoBehaviour
     private void StopMovement()
     {
         animator.SetTrigger("combatStop");
-        BattleGrid.Instance.ReenableTileClickables();
+        BattleGrid.Instance.EnableTileColliders();
     }
 
     private void StartMovementAnimation(Vector2 targetPosition)

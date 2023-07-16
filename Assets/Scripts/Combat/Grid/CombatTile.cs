@@ -9,6 +9,9 @@ public class CombatTile : Clickable
 
     public List<IUnit> collidingUnits;
 
+    public int tileXPos;
+    public int tileYPos;
+
     private void Awake() 
     {
         collidingUnits = new List<IUnit>();    
@@ -20,6 +23,8 @@ public class CombatTile : Clickable
         {
             collidingUnits.Add(unit);
             tileCollider.enabled = false;
+            unit.tileXPos = tileXPos;
+            unit.tileYPos = tileYPos;
         }
     }
 
