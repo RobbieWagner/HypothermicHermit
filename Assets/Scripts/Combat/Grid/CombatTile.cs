@@ -5,7 +5,8 @@ using UnityEngine;
 public class CombatTile : Clickable
 {
     [SerializeField] private SpriteRenderer tileSpriteRenderer;
-    public Collider2D tileCollider;
+    [SerializeField] private Collider2D tileCollider;
+    [SerializeField] private SpriteRenderer tileIsActiveSprite;
 
     public List<IUnit> collidingUnits;
 
@@ -22,7 +23,7 @@ public class CombatTile : Clickable
         if(!collidingUnits.Contains(unit)) 
         {
             collidingUnits.Add(unit);
-            tileCollider.enabled = false;
+            EnableTrigger(false);
             unit.tileXPos = tileXPos;
             unit.tileYPos = tileYPos;
         }
@@ -31,10 +32,6 @@ public class CombatTile : Clickable
     public void RemoveCollidingUnit(IUnit unit)
     {
         if(collidingUnits.Contains(unit)) collidingUnits.Remove(unit);
-        if(collidingUnits.Count == 0) 
-        {
-            tileCollider.enabled = true;
-        }
     }
 
     protected override void OnPointerEnter()
@@ -51,13 +48,23 @@ public class CombatTile : Clickable
     {
         if(CursorController.Instance.clickables.Count > 0 && CursorController.Instance.clickables[0] == this && CursorController.Instance.selectedClickable != null)
         {
-            AllyCombatMovement allyMovement = CursorController.Instance.selectedClickable.GetComponent<AllyCombatMovement>();
+            AllyCombatAction allyMovement = CursorController.Instance.selectedClickable.GetComponent<AllyCombatAction>();
             if(allyMovement != null)
             {
                 IUnit unit = allyMovement.unitComponent;
 
-                unit.UseUnitMovement(new Vector2(transform.position.x, transform.position.y - BattleGrid.Instance.GetCellSize()/4));
+                int spentMovement = BattleGrid.Instance.CalculateDistanceBetweenTiles(tileXPos, tileYPos, allyMovement.unitComponent.tileXPos, allyMovement.unitComponent.tileYPos);
+
+                unit.UseUnitMovement(new Vector2(transform.position.x, transform.position.y - BattleGrid.Instance.GetCellSize()/4), spentMovement);
+                BattleGrid.Instance.DisableAllTileColliders();
+                CursorController.Instance.UnsetSelectedClickable();
             }
         }
+    }
+
+    public void EnableTrigger(bool enable, bool enableActiveSprite = false)
+    {
+        tileCollider.enabled = enable;
+        tileIsActiveSprite.enabled = enableActiveSprite;
     }
 }

@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PlayerCombatMovement : MonoBehaviour
+public class PlayerCombatAnimation : MonoBehaviour
 {
     [SerializeField] private Animator animator;
     private void Awake() 

@@ -6,7 +6,7 @@ using DG.Tweening;
 
 public class IUnit : MonoBehaviour
 {
-    [HideInInspector] public Vector2 gridPosition;
+    [HideInInspector] public Vector2 position;
     [SerializeField] private Animator animator;
     [SerializeField] private int unitSpeed = 5;
 
@@ -43,20 +43,21 @@ public class IUnit : MonoBehaviour
         }
     }
 
-    public virtual void UseUnitMovement(Vector2 newPosition)
+    public virtual void UseUnitMovement(Vector2 newPosition, int spentMovement)
     {
-        MoveUnit(newPosition);
+        MoveUnit(newPosition, spentMovement);
         OnMoveUnit(this);
     }
 
-    public virtual void MoveUnit(Vector2 newPosition, float movementDuration = 1f)
+    public virtual void MoveUnit(Vector2 newPosition, int spentMovement, float movementDuration = 1f)
     {
         float duration = (1-Mathf.InverseLerp(1,0, transform.position.x));
         StopAllCoroutines();
         StartMovementAnimation(newPosition);
         transform.DOMove(newPosition, movementDuration, false)
             .OnComplete(StopMovement);
-        gridPosition = newPosition;
+        position = newPosition;
+        if(spentMovement > 0) OnEndMoveUnit(spentMovement);
     }
 
     public delegate void OnMoveUnitDelegate(IUnit unit);
@@ -67,6 +68,9 @@ public class IUnit : MonoBehaviour
         animator.SetTrigger("combatStop");
         BattleGrid.Instance.EnableTileColliders();
     }
+
+    public delegate void OnEndMoveUnitDelegate(int spentMovement);
+    public event OnEndMoveUnitDelegate OnEndMoveUnit = delegate { };    
 
     private void StartMovementAnimation(Vector2 targetPosition)
     {

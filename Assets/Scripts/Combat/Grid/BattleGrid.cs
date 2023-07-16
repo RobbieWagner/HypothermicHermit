@@ -51,6 +51,7 @@ public class BattleGrid : MonoBehaviour
     }
 
     //Instantiate units, then display the grid based off combat units
+    //*Instantiate at the start of run time to not take up processing time*    
     private void CreateBattleGrid()
     {
         AddGridUnits();
@@ -82,13 +83,13 @@ public class BattleGrid : MonoBehaviour
                 tileGO.name = "tile " + i + " " + j; 
 
                 CombatTile tile = tileGO.GetComponent<CombatTile>();
-
-                rowTiles.Add(tileGO.GetComponent<CombatTile>());
+                tile.EnableTrigger(true);
                 tile.tileYPos = rowTiles.Count;
+                rowTiles.Add(tileGO.GetComponent<CombatTile>());
             }
 
-            tileGrid.Add(rowTiles);
             foreach(CombatTile tile in rowTiles) tile.tileXPos = tileGrid.Count;
+            tileGrid.Add(rowTiles);
         }
 
         TrackUnitPositions();
@@ -140,7 +141,7 @@ public class BattleGrid : MonoBehaviour
                     unitPosition = GameGrid.Instance.GetTilePosition(FindClosestNearbyTile(unit), CELL_SIZE);
                     attemptsToFindEmptyTile++;
                 }
-                unit.MoveUnit(unitPosition);
+                unit.MoveUnit(unitPosition, 0);
             }
 
             unitPositions.Add(unitPosition);
@@ -197,8 +198,45 @@ public class BattleGrid : MonoBehaviour
             foreach(CombatTile tile in row)
             {
                 tile.collidingUnits.Clear();
-                tile.tileCollider.enabled = true;
+                tile.EnableTrigger(true);
             }
         }
+    }
+
+    //Enables tiles around a selected unit
+    public void EnableTileColliders(int speed, Vector2 center)
+    {
+        Debug.Log("enabled");
+        for(int i = (int)(center.x - speed); i <= (int)(center.x + speed); i++)
+        {
+            for(int j = (int)(center.y - speed); j <= (int)(center.y + speed); j++)
+            {
+                if(tileGrid[i][j].collidingUnits.Count == 0) 
+                {
+                    Debug.Log("tile " + i + " " + j + "active");
+                    tileGrid[i][j].EnableTrigger(true, true);
+                }
+            }
+        }
+    }
+
+    public void DisableAllTileColliders()
+    {
+        foreach(List<CombatTile> tileRow in tileGrid)
+        {
+            foreach(CombatTile tile in tileRow)
+            {
+                tile.EnableTrigger(false);
+            }
+        }
+    }
+
+    public int CalculateDistanceBetweenTiles(int tile1x, int tile1y, int tile2x, int tile2y)
+    {
+        int distanceX = Math.Abs(tile1x-tile2x);
+        int distanceY = Math.Abs(tile1y-tile2y);
+
+        if(distanceX > distanceY) return distanceX;
+        return distanceY; 
     }
 }

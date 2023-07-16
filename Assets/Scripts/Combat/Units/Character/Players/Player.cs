@@ -9,7 +9,7 @@ public class Player : Character
 
     public static Player Instance {get; private set;}
 
-    private void Awake() {
+    protected override void Awake() {
         if (Instance != null && Instance != this) 
         { 
             Destroy(this); 
@@ -18,6 +18,8 @@ public class Player : Character
         { 
             Instance = this; 
         } 
+
+        base.Awake();
     }
 
     public override void AddUnitToGrid()
@@ -25,9 +27,9 @@ public class Player : Character
         
     }
 
-    public override void MoveUnit(Vector2 newPosition, float movementDuration = 1f)
+    public override void MoveUnit(Vector2 newPosition, int spentMovement, float movementDuration = 1f)
     {
         playerInitialCombatPosition = newPosition;
-        base.MoveUnit(newPosition);
+        base.MoveUnit(newPosition, spentMovement);
     }
 }

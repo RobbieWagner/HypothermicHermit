@@ -9,12 +9,14 @@ public class OverworldEnemy : Enemy
     [SerializeField] private float sightDistance = 8f;
     private bool canSeePlayer;
 
-    private void Awake() 
+    protected override void Awake() 
     {
         EnemyCombatTrigger.radius = Manager.Instance.enemyNoticeRange;    
         canSeePlayer = false;
 
         CombatManager.Instance.OnCreateNewCombat += DisableEnemyCombatTriggers;
+
+        base.Awake(); 
     }
 
     private void FixedUpdate() 
