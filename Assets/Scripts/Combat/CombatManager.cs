@@ -3,6 +3,12 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
+public enum CombatPhaseEnum
+{
+    ally,
+    enemy
+}
+
 public class CombatManager : MonoBehaviour
 {
 
@@ -12,6 +18,21 @@ public class CombatManager : MonoBehaviour
     public List<Character> characters;
     [HideInInspector] public List<Obstacle> obstacles;
     [SerializeField] public Canvas gridWorldCanvas;
+
+    private int combatPhase;
+    public int CombatPhase
+    {
+        get{return combatPhase;}
+        set
+        {
+            if(value == combatPhase) return;
+            combatPhase = value;
+            OnPhaseChange(combatPhase);
+        }
+    }
+
+    public delegate void OnPhaseChangeDelegate(int phase);
+    public event OnPhaseChangeDelegate OnPhaseChange;
 
     public static CombatManager Instance {get; private set;}
 
@@ -29,6 +50,8 @@ public class CombatManager : MonoBehaviour
 
         characters = new List<Character>();
         obstacles = new List<Obstacle>();
+
+        combatPhase = -1;
     }
 
     private void ToggleCombat(int gameState)
@@ -51,6 +74,11 @@ public class CombatManager : MonoBehaviour
 
     public delegate void OnCreateNewCombatDelegate();
     public event OnCreateNewCombatDelegate OnCreateNewCombat;
+
+    public void EnableEnemyClickables(int value)
+    {
+        //get enemy clickables enabled using Battle Grid
+    }
 
     //Stops combat by user pressing esc
     private void OnStopCombat()

@@ -4,11 +4,11 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.EventSystems;
 
-public class AllyCombatAction : Clickable
+public class AllyCombatClickable : Clickable
 {
-    public IUnit unitComponent;
-    public bool outOfMovement;
+    public Character unitComponent;
     private int movementSpentThisTurn;
+    private int actionsSpentThisTurn;
 
     private void Awake() 
     {
@@ -27,8 +27,13 @@ public class AllyCombatAction : Clickable
 
     private void SpendMovement(int spentMovement)
     {
+        Debug.Log(unitComponent.OutOfActionsThisTurn);
         movementSpentThisTurn += spentMovement;
-        if(movementSpentThisTurn == unitComponent.UnitSpeed) outOfMovement = true;
+        if(movementSpentThisTurn == unitComponent.UnitSpeed) 
+        {
+            unitComponent.OutOfMovementThisTurn = true;
+            if(!unitComponent.OutOfActionsThisTurn) ClickState = (int) clickStateEnum.enabled;
+        }
         else ClickState = (int) clickStateEnum.enabled;
     }
 
@@ -62,6 +67,8 @@ public class AllyCombatAction : Clickable
             CursorController.Instance.SetSelectedClickable(this);
             BattleGrid.Instance.DisableAllTileColliders();
             BattleGrid.Instance.EnableTileColliders(unitComponent.UnitSpeed - movementSpentThisTurn, new Vector2(unitComponent.tileXPos, unitComponent.tileYPos));
+            CombatManager.Instance.EnableEnemyClickables(unitComponent.UnitSpeed - movementSpentThisTurn);
+            Combat.Instance.EnableTargetClickables();
             base.OnPointerDown();
         }
     }

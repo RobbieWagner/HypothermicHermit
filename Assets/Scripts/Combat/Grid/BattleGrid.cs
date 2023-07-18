@@ -206,14 +206,13 @@ public class BattleGrid : MonoBehaviour
     //Enables tiles around a selected unit
     public void EnableTileColliders(int speed, Vector2 center)
     {
-        Debug.Log("enabled");
         for(int i = (int)(center.x - speed); i <= (int)(center.x + speed); i++)
         {
             for(int j = (int)(center.y - speed); j <= (int)(center.y + speed); j++)
             {
                 if(tileGrid[i][j].collidingUnits.Count == 0) 
                 {
-                    Debug.Log("tile " + i + " " + j + "active");
+                    //Debug.Log("tile " + i + " " + j + "active");
                     tileGrid[i][j].EnableTrigger(true, true);
                 }
             }

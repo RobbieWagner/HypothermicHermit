@@ -8,11 +8,11 @@ public class IUnit : MonoBehaviour
 {
     [HideInInspector] public Vector2 position;
     [SerializeField] private Animator animator;
-    [SerializeField] private int unitSpeed = 5;
 
     public int tileXPos;
     public int tileYPos;
     
+    [SerializeField] private int unitSpeed = 5;
     public int UnitSpeed
     {
         get {return unitSpeed;}
@@ -22,6 +22,35 @@ public class IUnit : MonoBehaviour
             unitSpeed = value;
         }
     }
+
+    private bool outOfMovementThisTurn;
+    public bool OutOfMovementThisTurn
+    {
+        get{return outOfMovementThisTurn;}
+        set
+        {
+            outOfMovementThisTurn = value;
+            if(outOfActionsThisTurn && outOfMovementThisTurn) 
+            {
+                Debug.Log("hi");
+                OnCompleteTurn(this);
+            }
+        }
+    }
+
+    private bool outOfActionsThisTurn;
+    public bool OutOfActionsThisTurn
+    {
+        get{return outOfActionsThisTurn;}
+        set
+        {
+            outOfActionsThisTurn = value;
+            if(outOfActionsThisTurn && outOfMovementThisTurn) OnCompleteTurn(this);
+        }
+    }
+
+    public delegate void OnCompleteTurnDelegate(IUnit unit);
+    public event OnCompleteTurnDelegate OnCompleteTurn = delegate { };
 
     protected virtual void Awake() 
     {
@@ -85,5 +114,12 @@ public class IUnit : MonoBehaviour
             if(direction.y >= 0) animator.SetTrigger("combatUp");
             else animator.SetTrigger("combatDown");
         }
+    }
+
+    public void StartUnitsTurn()
+    {
+        Debug.Log("hi");
+        OutOfActionsThisTurn = false;
+        OutOfMovementThisTurn = false;
     }
 }

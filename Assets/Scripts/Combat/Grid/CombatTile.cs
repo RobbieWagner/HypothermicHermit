@@ -48,12 +48,12 @@ public class CombatTile : Clickable
     {
         if(CursorController.Instance.clickables.Count > 0 && CursorController.Instance.clickables[0] == this && CursorController.Instance.selectedClickable != null)
         {
-            AllyCombatAction allyMovement = CursorController.Instance.selectedClickable.GetComponent<AllyCombatAction>();
-            if(allyMovement != null)
+            AllyCombatClickable allyClickable = CursorController.Instance.selectedClickable.GetComponent<AllyCombatClickable>();
+            if(allyClickable != null)
             {
-                IUnit unit = allyMovement.unitComponent;
+                IUnit unit = allyClickable.unitComponent;
 
-                int spentMovement = BattleGrid.Instance.CalculateDistanceBetweenTiles(tileXPos, tileYPos, allyMovement.unitComponent.tileXPos, allyMovement.unitComponent.tileYPos);
+                int spentMovement = BattleGrid.Instance.CalculateDistanceBetweenTiles(tileXPos, tileYPos, allyClickable.unitComponent.tileXPos, allyClickable.unitComponent.tileYPos);
 
                 unit.UseUnitMovement(new Vector2(transform.position.x, transform.position.y - BattleGrid.Instance.GetCellSize()/4), spentMovement);
                 BattleGrid.Instance.DisableAllTileColliders();
