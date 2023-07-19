@@ -16,6 +16,8 @@ public class Combat : MonoBehaviour
     private List<Enemy> enemies;
     private List<Ally> allies;
 
+    [HideInInspector] public Character currentSelectedUnit;
+
     public static Combat Instance {get; private set;}
     private void Awake() 
     {
@@ -56,9 +58,27 @@ public class Combat : MonoBehaviour
         Manager.Instance.GameState = (int) GameStateEnum.explore;
     }
 
-    public void EnableTargetClickables()
+    public void EnableTargetClickables(bool targetsOpponents, int range, Character user)
     {
+        List<IUnit> targetUnits = new List<IUnit>();
+        if(targetsOpponents) targetUnits.AddRange(enemies);
+        else
+        {
+            targetUnits.AddRange(allies);
+            targetUnits.Add(Player.Instance);
+        }
 
+        foreach(IUnit unit in targetUnits)
+        {
+            if(unit.CalculateDistanceFromUnit(user) <= range) unit.targetClickable.gameObject.SetActive(true);
+        }
+    }
+
+    public void DisableTargetClickables()
+    {
+        if(allies != null) foreach(IUnit unit in allies){unit.targetClickable.gameObject.SetActive(false);}
+        if(enemies != null) foreach(IUnit unit in enemies){unit.targetClickable.gameObject.SetActive(false);}
+        Player.Instance.targetClickable.gameObject.SetActive(false);
     }
 
     public void EndCombat()

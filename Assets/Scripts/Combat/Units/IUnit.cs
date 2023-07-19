@@ -9,11 +9,25 @@ public class IUnit : MonoBehaviour
     [HideInInspector] public Vector2 position;
     [SerializeField] private Animator animator;
 
+    public TargetClickable targetClickable;
+
+    public List<CombatAction> unitActions;
+    private int currentAction;
+    public int CurrentAction
+    {
+        get{return currentAction;}
+        set
+        {
+            if(currentAction == value % unitActions.Count) return;
+            currentAction = value % unitActions.Count;
+        }
+    }
+
     public int tileXPos;
     public int tileYPos;
     
     [SerializeField] private int unitSpeed = 5;
-    public int UnitSpeed
+    public virtual int UnitSpeed
     {
         get {return unitSpeed;}
         set
@@ -24,12 +38,13 @@ public class IUnit : MonoBehaviour
     }
 
     private bool outOfMovementThisTurn;
-    public bool OutOfMovementThisTurn
+    public virtual bool OutOfMovementThisTurn
     {
         get{return outOfMovementThisTurn;}
         set
         {
             outOfMovementThisTurn = value;
+            OnCompleteAction();
             if(outOfActionsThisTurn && outOfMovementThisTurn) 
             {
                 Debug.Log("hi");
@@ -45,6 +60,7 @@ public class IUnit : MonoBehaviour
         set
         {
             outOfActionsThisTurn = value;
+            OnCompleteAction();
             if(outOfActionsThisTurn && outOfMovementThisTurn) OnCompleteTurn(this);
         }
     }
@@ -52,9 +68,13 @@ public class IUnit : MonoBehaviour
     public delegate void OnCompleteTurnDelegate(IUnit unit);
     public event OnCompleteTurnDelegate OnCompleteTurn = delegate { };
 
+    public delegate void OnCompleteActionDelegate();
+    public event OnCompleteActionDelegate OnCompleteAction = delegate { };
+
     protected virtual void Awake() 
     {
         UnitSpeed = unitSpeed;
+        targetClickable.gameObject.SetActive(false);
     }
 
     public virtual void AddUnitToGrid()
@@ -78,6 +98,18 @@ public class IUnit : MonoBehaviour
         OnMoveUnit(this);
     }
 
+    public delegate void OnMoveUnitDelegate(IUnit unit);
+    public event OnMoveUnitDelegate OnMoveUnit = delegate { };
+
+    public virtual void UseUnitAction(IUnit user, IUnit target)
+    {
+        unitActions[CurrentAction].Act(user, target);
+        OnAct(this);
+    }
+
+    public delegate void OnActDelegate(IUnit unit);
+    public event OnActDelegate OnAct = delegate { };
+
     public virtual void MoveUnit(Vector2 newPosition, int spentMovement, float movementDuration = 1f)
     {
         float duration = (1-Mathf.InverseLerp(1,0, transform.position.x));
@@ -88,9 +120,6 @@ public class IUnit : MonoBehaviour
         position = newPosition;
         if(spentMovement > 0) OnEndMoveUnit(spentMovement);
     }
-
-    public delegate void OnMoveUnitDelegate(IUnit unit);
-    public event OnMoveUnitDelegate OnMoveUnit = delegate { };
 
     private void StopMovement()
     {
@@ -121,5 +150,13 @@ public class IUnit : MonoBehaviour
         Debug.Log("hi");
         OutOfActionsThisTurn = false;
         OutOfMovementThisTurn = false;
+    }
+
+    public int CalculateDistanceFromUnit(IUnit other)
+    {
+        int distanceX = Math.Abs(tileXPos - other.tileXPos);
+        int distanceY = Math.Abs(tileYPos - other.tileYPos);
+
+        return Math.Max(distanceX, distanceY);
     }
 }

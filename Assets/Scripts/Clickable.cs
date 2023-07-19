@@ -13,7 +13,6 @@ public enum clickStateEnum
 
 public class Clickable : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IPointerDownHandler
 {
-
     [SerializeField] protected int cursorState;
 
     private int clickState;
@@ -26,6 +25,7 @@ public class Clickable : MonoBehaviour, IPointerEnterHandler, IPointerExitHandle
         set
         {
             if(value == clickState) return;
+            Debug.Log(value);
             clickState = value;
             OnChangeClickState(clickState);
         }

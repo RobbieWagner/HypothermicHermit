@@ -5,4 +5,10 @@ using UnityEngine;
 public class DealDamage : ActionEffect
 {
     [SerializeField] private int damage;
+
+    public override void TakeAction(IUnit user)
+    {
+        Debug.Log("action");
+        base.TakeAction(user);
+    }
 }

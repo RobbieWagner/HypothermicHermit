@@ -89,12 +89,11 @@ public class CursorController : MonoBehaviour
     public void SetSelectedClickable(Clickable clickable)
     {
         selectedClickable = clickable;
-        CursorState = (int) GameCursorState.move_state;
+        CursorState = (int) GameCursorState.default_state;
     }
 
     public void UnsetSelectedClickable()
     {
         selectedClickable = null;
-        CursorState = (int) GameCursorState.default_state;
     }
 }

@@ -5,10 +5,21 @@ using UnityEngine;
 [CreateAssetMenu(menuName = "Combat Action")]
 public class CombatAction : ScriptableObject
 {
-    //Defines an action a unit can take during combat. Will create a SerializedReference for this one
+    [SerializeField] public bool targetsOpponents;
+    [SerializeField] public int range;
+    //[SerializeField] public bool AOE;
     [SerializeReference] public List<ActionEffect> effects;
 
     [ContextMenu(nameof(DealDamage))] void AddDamageEffect(){effects.Add(new DealDamage());}
     [ContextMenu(nameof(Heal))] void AddHealEffect(){effects.Add(new Heal());}
     [ContextMenu(nameof(StatChange))] void AddStatChangeEffect(){effects.Add(new StatChange());}
+
+    public void Act(IUnit user, IUnit target)
+    {
+        foreach(ActionEffect effect in effects)
+        {
+            effect.TakeAction(user);
+        }
+        user.OutOfActionsThisTurn = true;
+    }
 }
