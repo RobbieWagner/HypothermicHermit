@@ -70,7 +70,11 @@ public class Combat : MonoBehaviour
 
         foreach(IUnit unit in targetUnits)
         {
-            if(unit.CalculateDistanceFromUnit(user) <= range) unit.targetClickable.gameObject.SetActive(true);
+            if(unit.CalculateDistanceFromUnit(user) <= range) 
+            {
+                unit.targetClickable.gameObject.SetActive(true);
+                Debug.Log(unit.tileXPos);
+            }
         }
     }
 

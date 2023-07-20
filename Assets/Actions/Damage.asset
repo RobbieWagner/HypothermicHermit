@@ -13,6 +13,7 @@ MonoBehaviour:
   m_Name: Damage
   m_EditorClassIdentifier: 
   targetsOpponents: 1
+  range: 1
   effects:
   - rid: 1234314335543099393
   references:

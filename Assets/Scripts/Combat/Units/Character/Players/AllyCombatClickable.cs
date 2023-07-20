@@ -44,6 +44,9 @@ public class AllyCombatClickable : Clickable
             if(!unitComponent.OutOfActionsThisTurn) ClickState = (int) clickStateEnum.enabled;
         }
         else ClickState = (int) clickStateEnum.enabled;
+
+        Debug.Log(ClickState);
+        Debug.Log(CursorController.Instance.CursorState);
     }
 
     private void SpendAction(IUnit unit)
@@ -64,6 +67,10 @@ public class AllyCombatClickable : Clickable
                 ClickState = (int) clickStateEnum.hover;
                 CursorController.Instance.CursorState = (int) GameCursorState.hovering_state;
             }
+        }
+        else
+        {
+            Debug.Log("inactive");
         }
     }
 
