@@ -716,7 +716,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   CELL_SIZE: 2
-  TILE_OFFSET: {x: 1, y: -0.5, z: 0}
+  TILE_OFFSET: {x: 0, y: 0.5, z: 0}
   gridSize: {x: 17, y: 11}
   gridUnits: []
   combatTilePrefab: {fileID: 5245528716252540200, guid: de4391b913356b045ae2127957c44e9c, type: 3}

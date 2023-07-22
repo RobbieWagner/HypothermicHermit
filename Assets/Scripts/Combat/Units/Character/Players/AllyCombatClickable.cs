@@ -35,7 +35,6 @@ public class AllyCombatClickable : Clickable
 
     private void SpendMovement(int spentMovement)
     {
-        Debug.Log(unitComponent.OutOfActionsThisTurn);
         Combat.Instance.DisableTargetClickables();
         movementSpentThisTurn += spentMovement;
         if(movementSpentThisTurn == unitComponent.UnitSpeed) 
@@ -44,14 +43,10 @@ public class AllyCombatClickable : Clickable
             if(!unitComponent.OutOfActionsThisTurn) ClickState = (int) clickStateEnum.enabled;
         }
         else ClickState = (int) clickStateEnum.enabled;
-
-        Debug.Log(ClickState);
-        Debug.Log(CursorController.Instance.CursorState);
     }
 
     private void SpendAction(IUnit unit)
     {
-        Debug.Log("run");
         unitComponent.OutOfActionsThisTurn = true;
         if(!unitComponent.OutOfMovementThisTurn) ClickState = (int) clickStateEnum.enabled;
     }
@@ -60,17 +55,12 @@ public class AllyCombatClickable : Clickable
     {
         if(ClickState == (int) clickStateEnum.enabled) 
         {
-            Debug.Log("over");
             base.OnPointerEnter();
             if(CursorController.Instance.clickables[0] == this)
             {
                 ClickState = (int) clickStateEnum.hover;
                 CursorController.Instance.CursorState = (int) GameCursorState.hovering_state;
             }
-        }
-        else
-        {
-            Debug.Log("inactive");
         }
     }
 
@@ -91,7 +81,7 @@ public class AllyCombatClickable : Clickable
             CursorController.Instance.SetSelectedClickable(this);
             BattleGrid.Instance.DisableAllTileColliders();
             BattleGrid.Instance.EnableTileColliders(unitComponent.UnitSpeed - movementSpentThisTurn, new Vector2(unitComponent.tileXPos, unitComponent.tileYPos));
-            if (!unitComponent.OutOfActionsThisTurn) Combat.Instance.EnableTargetClickables(unitComponent.unitActions[unitComponent.CurrentAction].targetsOpponents, unitComponent.UnitSpeed - movementSpentThisTurn + unitComponent.unitActions[unitComponent.CurrentAction].range, unitComponent);
+            if(!unitComponent.OutOfActionsThisTurn) Combat.Instance.EnableTargetClickables(unitComponent.unitActions[unitComponent.CurrentAction], unitComponent, unitComponent.UnitSpeed - movementSpentThisTurn);
             Combat.Instance.currentSelectedUnit = unitComponent;
             CombatManager.Instance.OnTakeAction += unitComponent.UseUnitAction;
 

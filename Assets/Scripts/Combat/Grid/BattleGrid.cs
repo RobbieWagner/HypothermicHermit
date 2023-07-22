@@ -16,8 +16,8 @@ public enum UnitMoveRanks
 public class BattleGrid : MonoBehaviour
 {
     [SerializeField] private float CELL_SIZE = 1;
-    private float BORDER_SIZE = 1;
-    [SerializeField] private Vector3 TILE_OFFSET;
+    private int BORDER_SIZE = 1;
+    [SerializeField] public Vector3 TILE_OFFSET;
 
     [SerializeField] private Vector2 gridSize;
 
@@ -29,7 +29,9 @@ public class BattleGrid : MonoBehaviour
     [SerializeField] private CombatTile combatTilePrefab;
     [SerializeField] private CombatBorderTile borderTilePrefab;
     [SerializeField] private Transform gridParent;  
-    private List<List<CombatTile>> tileGrid;
+
+    public PathFinder pathFinder;
+    public TileGrid tileGrid;
 
     public static BattleGrid Instance {get; private set;}
     private void Awake() 
@@ -44,7 +46,6 @@ public class BattleGrid : MonoBehaviour
         } 
 
         gridUnits = new List<IUnit>();
-        tileGrid = new List<List<CombatTile>>();
 
         CombatManager.Instance.OnCreateNewCombat += CreateBattleGrid;
         CombatManager.Instance.OnEndCombat += DestroyBattleGrid;
@@ -56,43 +57,35 @@ public class BattleGrid : MonoBehaviour
     {
         AddGridUnits();
 
-        float border = CELL_SIZE * BORDER_SIZE;
         Vector3 CENTER_OF_GRID = Player.Instance.playerInitialCombatPosition;
+        Vector3 GRID_ORIGIN = new Vector3(CENTER_OF_GRID.x - (gridSize.x/2 * CELL_SIZE) - (BORDER_SIZE/2 * CELL_SIZE) + CELL_SIZE/2, 
+                                          CENTER_OF_GRID.y - (gridSize.y/2 * CELL_SIZE) - (BORDER_SIZE/2 * CELL_SIZE) + CELL_SIZE/2);
 
-        float minXPos = (float) (CENTER_OF_GRID.x - (.5 * gridSize.x * CELL_SIZE));
-        float minYPos = (float) (CENTER_OF_GRID.y - (.5 * gridSize.y * CELL_SIZE));
-        float maxXPos = (float) (CENTER_OF_GRID.x + (.5 * gridSize.x * CELL_SIZE));
-        float maxYPos = (float) (CENTER_OF_GRID.y + (.5 * gridSize.y * CELL_SIZE));
-
-        for(float i = minXPos - border; i < maxXPos + border; i += CELL_SIZE)
+        tileGrid = new TileGrid((int)gridSize.x, (int)gridSize.y, CELL_SIZE, GRID_ORIGIN);
+        for(int x = -BORDER_SIZE; x < tileGrid.GetWidth() + BORDER_SIZE; x++)
         {
-            float xCoord = i;
-            List<CombatTile> rowTiles = new List<CombatTile>();
-
-            for(float j = minYPos - border + CELL_SIZE; j <= maxYPos + border; j += CELL_SIZE)
+            for(int y = -BORDER_SIZE; y < tileGrid.GetHeight() + BORDER_SIZE; y++)
             {
-                float yCoord = j;
-                GameObject tileGO;
-                if(xCoord < minXPos|| xCoord >= maxXPos|| yCoord < minYPos + CELL_SIZE|| yCoord > maxYPos)
+                CombatTile prefab = null;
+                if(x < 0 || y < 0 || x >= tileGrid.GetWidth() || y >= tileGrid.GetHeight())
                 {
-                    tileGO = Instantiate(borderTilePrefab.gameObject, gridParent);
+                    prefab = borderTilePrefab;
                 }
-                else tileGO = Instantiate(combatTilePrefab.gameObject, gridParent);
+                else prefab = combatTilePrefab;
 
-                tileGO.transform.position = new Vector3( xCoord, yCoord, 0) + TILE_OFFSET;
-                tileGO.name = "tile " + i + " " + j; 
-
-                CombatTile tile = tileGO.GetComponent<CombatTile>();
-                tile.EnableTrigger(true);
-                tile.tileYPos = rowTiles.Count;
-                rowTiles.Add(tileGO.GetComponent<CombatTile>());
+                CombatTile combatTile = Instantiate(prefab.transform, transform).GetComponent<CombatTile>();
+                combatTile.transform.position = tileGrid.GetWorldPosition(x,y) + TILE_OFFSET;
+                if(x >= 0 && y >= 0 && x < tileGrid.GetWidth() && y < tileGrid.GetHeight())
+                {
+                    tileGrid.grid[x,y].SetTile(combatTile);
+                }
             }
-
-            foreach(CombatTile tile in rowTiles) tile.tileXPos = tileGrid.Count;
-            tileGrid.Add(rowTiles);
         }
 
+        pathFinder = new PathFinder(tileGrid);
+
         TrackUnitPositions();
+        DisableAllTileColliders();
     }
 
     private void DestroyBattleGrid()
@@ -193,13 +186,10 @@ public class BattleGrid : MonoBehaviour
 
     public void EnableTileColliders()
     {
-        foreach(List<CombatTile> row in tileGrid)
+        foreach(Node node in tileGrid.grid)
         {
-            foreach(CombatTile tile in row)
-            {
-                tile.collidingUnits.Clear();
-                tile.EnableTrigger(true);
-            }
+            node.GetTile().collidingUnits.Clear();
+            node.GetTile().EnableTrigger(true);
         }
     }
 
@@ -210,10 +200,10 @@ public class BattleGrid : MonoBehaviour
         {
             for(int j = (int)(center.y - speed); j <= (int)(center.y + speed); j++)
             {
-                if(tileGrid[i][j].collidingUnits.Count == 0) 
+                if(tileGrid.grid[i,j].GetTile().collidingUnits.Count == 0) 
                 {
                     //Debug.Log("tile " + i + " " + j + "active");
-                    tileGrid[i][j].EnableTrigger(true, true);
+                    tileGrid.grid[i,j].GetTile().EnableTrigger(true, true);
                 }
             }
         }
@@ -221,12 +211,9 @@ public class BattleGrid : MonoBehaviour
 
     public void DisableAllTileColliders()
     {
-        foreach(List<CombatTile> tileRow in tileGrid)
+        foreach(Node node in tileGrid.grid)
         {
-            foreach(CombatTile tile in tileRow)
-            {
-                tile.EnableTrigger(false);
-            }
+            node.GetTile().EnableTrigger(false);
         }
     }
 
@@ -237,5 +224,12 @@ public class BattleGrid : MonoBehaviour
 
         if(distanceX > distanceY) return distanceX;
         return distanceY; 
+    }
+
+    public CombatTile GetTile(int posX, int posY)
+    {
+        //Debug.Log("tileXPos " + posX + " tileYPos " + posY);
+        if(posY < tileGrid.grid.GetLength(0) && posX < tileGrid.grid.GetLength(1)) return tileGrid.grid[posX,posY].GetTile();
+        return null;
     }
 }

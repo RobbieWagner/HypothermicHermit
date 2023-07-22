@@ -25,7 +25,7 @@ public class Clickable : MonoBehaviour, IPointerEnterHandler, IPointerExitHandle
         set
         {
             if(value == clickState) return;
-            Debug.Log("state" + value);
+            //Debug.Log("state " + value);
             clickState = value;
             OnChangeClickState(clickState);
         }

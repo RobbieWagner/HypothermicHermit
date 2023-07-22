@@ -8,7 +8,6 @@ public class DealDamage : ActionEffect
 
     public override void TakeAction(IUnit user)
     {
-        Debug.Log("action");
         base.TakeAction(user);
     }
 }

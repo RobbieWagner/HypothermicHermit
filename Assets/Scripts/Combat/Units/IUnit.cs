@@ -47,7 +47,6 @@ public class IUnit : MonoBehaviour
             OnCompleteAction();
             if(outOfActionsThisTurn && outOfMovementThisTurn) 
             {
-                Debug.Log("hi");
                 OnCompleteTurn(this);
             }
         }
@@ -110,6 +109,7 @@ public class IUnit : MonoBehaviour
     public delegate void OnActDelegate(IUnit unit);
     public event OnActDelegate OnAct = delegate { };
 
+    #region Movement
     public virtual void MoveUnit(Vector2 newPosition, int spentMovement, float movementDuration = 1f)
     {
         float duration = (1-Mathf.InverseLerp(1,0, transform.position.x));
@@ -121,9 +121,36 @@ public class IUnit : MonoBehaviour
         if(spentMovement > 0) OnEndMoveUnit(spentMovement);
     }
 
+    public virtual void MoveUnit(List<Node> path, float movementDuration = .2f)
+    {
+        StartCoroutine(MoveUnitCo(path, movementDuration));
+    }
+
+    private IEnumerator MoveUnitCo(List<Node> path, float movementDuration = .2f)
+    {
+        foreach(Node node in path)
+        {
+            CombatTile destination = node.GetTile();
+            Vector3 newPosition = destination.transform.position - BattleGrid.Instance.TILE_OFFSET;
+            StartMovementAnimation(newPosition);
+            yield return transform.DOMove(newPosition, movementDuration, false)
+                        .SetEase(Ease.Linear)
+                        .WaitForCompletion();
+            position = newPosition;
+        }
+
+        StopMovement();
+        OnEndMoveUnit(path.Count);
+        StopCoroutine(MoveUnitCo(path, movementDuration));
+    }
+
     private void StopMovement()
     {
-        animator.SetTrigger("combatStop");
+        animator.SetBool("combatMoving", false);
+        animator.ResetTrigger("combatLeft");
+        animator.ResetTrigger("combatRight");
+        animator.ResetTrigger("combatUp");
+        animator.ResetTrigger("combatDown");
         BattleGrid.Instance.EnableTileColliders();
     }
 
@@ -132,7 +159,9 @@ public class IUnit : MonoBehaviour
 
     private void StartMovementAnimation(Vector2 targetPosition)
     {
+        //Debug.Log("movement started");
         Vector2 direction = targetPosition - new Vector2(transform.position.x, transform.position.y);
+        animator.SetBool("combatMoving", true);
         if(Mathf.Abs(direction.x) >= Mathf.Abs(direction.y))
         {
             if(direction.x >= 0) animator.SetTrigger("combatRight");
@@ -144,10 +173,9 @@ public class IUnit : MonoBehaviour
             else animator.SetTrigger("combatDown");
         }
     }
-
+    #endregion
     public void StartUnitsTurn()
     {
-        Debug.Log("hi");
         OutOfActionsThisTurn = false;
         OutOfMovementThisTurn = false;
     }

@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+//Acts as the "nodes" for smart movement when clicked
 public class CombatTile : Clickable
 {
     [SerializeField] private SpriteRenderer tileSpriteRenderer;
@@ -10,8 +11,10 @@ public class CombatTile : Clickable
 
     public List<IUnit> collidingUnits;
 
-    public int tileXPos;
-    public int tileYPos;
+    public int x;
+    public int y;
+
+    [SerializeField] public float cost = 1;
 
     private void Awake() 
     {
@@ -24,8 +27,8 @@ public class CombatTile : Clickable
         {
             collidingUnits.Add(unit);
             EnableTrigger(false);
-            unit.tileXPos = tileXPos;
-            unit.tileYPos = tileYPos;
+            unit.tileXPos = x;
+            unit.tileYPos = y;
         }
     }
 
@@ -53,9 +56,8 @@ public class CombatTile : Clickable
             {
                 IUnit unit = allyClickable.unitComponent;
 
-                int spentMovement = BattleGrid.Instance.CalculateDistanceBetweenTiles(tileXPos, tileYPos, allyClickable.unitComponent.tileXPos, allyClickable.unitComponent.tileYPos);
-
-                unit.UseUnitMovement(new Vector2(transform.position.x, transform.position.y - BattleGrid.Instance.GetCellSize()/4), spentMovement);
+                List<Node> path = BattleGrid.Instance.pathFinder.FindPath(allyClickable.unitComponent.tileXPos, allyClickable.unitComponent.tileYPos, x, y);
+                allyClickable.unitComponent.MoveUnit(path);
                 BattleGrid.Instance.DisableAllTileColliders();
                 CursorController.Instance.UnsetSelectedClickable();
             }

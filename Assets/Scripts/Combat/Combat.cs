@@ -58,22 +58,48 @@ public class Combat : MonoBehaviour
         Manager.Instance.GameState = (int) GameStateEnum.explore;
     }
 
-    public void EnableTargetClickables(bool targetsOpponents, int range, Character user)
+    public void EnableTargetClickables(CombatAction action, Character user, int unitMovementLeft)
     {
+        //Add if statements to check for action type once more are added (Like AOE)
+        TileGrid combatGrid = BattleGrid.Instance.tileGrid;
+        PathFinder pathFinder = BattleGrid.Instance.pathFinder;
         List<IUnit> targetUnits = new List<IUnit>();
-        if(targetsOpponents) targetUnits.AddRange(enemies);
+        
+        if(action.targetsOpponents) targetUnits.AddRange(enemies);
         else
         {
-            targetUnits.AddRange(allies);
             targetUnits.Add(Player.Instance);
+            targetUnits.AddRange(allies);
         }
 
         foreach(IUnit unit in targetUnits)
         {
-            if(unit.CalculateDistanceFromUnit(user) <= range) 
+
+            if(pathFinder.CalculateDistance(combatGrid.grid[unit.tileXPos, unit.tileYPos], combatGrid.grid[user.tileXPos, user.tileYPos]) <= action.range) 
             {
                 unit.targetClickable.gameObject.SetActive(true);
-                Debug.Log(unit.tileXPos);
+            }
+            else
+            {
+                List<Node> currentPath = null;
+                List<Node> neighbors = pathFinder.GetNeighbors(combatGrid.grid[unit.tileXPos, unit.tileYPos]);
+                // Debug.Log(neighbors.Count);
+
+                foreach(Node node in neighbors)
+                {
+                    List<Node> path = pathFinder.FindPath(user.tileXPos, user.tileYPos, node.x, node.y);
+                    if(currentPath == null || currentPath.Count > path.Count) 
+                    {
+                        Debug.Log("new path found for " + unit.gameObject.name);
+                        currentPath = path;
+                    }
+                }
+
+                if(currentPath != null && currentPath.Count < (action.range + unitMovementLeft)) 
+                {
+                    Debug.Log(unit.gameObject.name + currentPath.Count);
+                    unit.targetClickable.gameObject.SetActive(true);
+                }
             }
         }
     }
