@@ -87,6 +87,7 @@ public class AllyCombatClickable : Clickable
             if(!unitComponent.OutOfActionsThisTurn) Combat.Instance.EnableTargetClickables(unitComponent.unitActions[unitComponent.CurrentAction], unitComponent, unitComponent.UnitSpeed - movementSpentThisTurn);
             Combat.Instance.currentSelectedUnit = unitComponent;
             CombatManager.Instance.OnTakeAction += unitComponent.UseUnitAction;
+            CombatCameraMovement.Instance.MoveCamera(transform.position);
 
             base.OnPointerDown();
         }

@@ -44,7 +44,12 @@ public class Combat : MonoBehaviour
         enemies = CombatManager.Instance.characters.OfType<Enemy>().ToList();
 
         CombatManager.Instance.CombatPhase = (int) CombatPhaseEnum.ally;
+
+        OnInitializeCombat();
     }
+
+    public delegate void OnInitializeCombatDelegate();
+    public event OnInitializeCombatDelegate OnInitializeCombat = delegate {};
 
     private void StartNextCombatPhase(int phase)
     {
@@ -55,6 +60,7 @@ public class Combat : MonoBehaviour
                 EnableCharacterUse(ally);
             }
             EnableCharacterUse(Player.Instance);
+            CombatCameraMovement.Instance.canMove = true;
         }
     }
 

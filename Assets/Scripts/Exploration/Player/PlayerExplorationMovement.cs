@@ -23,6 +23,8 @@ public class PlayerExplorationMovement : MonoBehaviour
 
     [SerializeField] public MovementSounds movementSounds;
 
+    public static PlayerExplorationMovement Instance {get; private set;}
+
     void Start() 
     {
         canMove = true;
@@ -34,13 +36,27 @@ public class PlayerExplorationMovement : MonoBehaviour
         currentWalkSpeed = defaultWalkSpeed;
     }
 
-    void Awake() => playerControls = new PlayerControls();
+    void Awake()
+    {
+        if (Instance != null && Instance != this) 
+        { 
+            Destroy(this); 
+        } 
+        else 
+        { 
+            Instance = this; 
+        } 
+
+        playerControls = new PlayerControls();
+        Manager.Instance.OnGameStateChange += StopMovement;
+    }
 
     public void OnMove(InputValue value) 
     {
         hasRecentlyMoved = true;
         if(canMove)
         {
+            Debug.Log("move");
             //check if the player is coming from a stationary state
             if(animator.GetFloat("vertical") == 0 && animator.GetFloat("horizontal") == 0)
             {
@@ -66,6 +82,7 @@ public class PlayerExplorationMovement : MonoBehaviour
     {
         if(canMove)
         {
+            Debug.Log("hi");
             //check if the player is coming from a stationary state
             if(animator.GetFloat("vertical") == 0 && animator.GetFloat("horizontal") == 0)
             {
@@ -79,7 +96,9 @@ public class PlayerExplorationMovement : MonoBehaviour
             //check if the player is going to a stationary state
             if(animator.GetFloat("vertical") == 0 && animator.GetFloat("horizontal") == 0)
             {
+                animator.SetBool("walking", false);
                 movementSounds.ToggleMovementSounds(false);
+                hasRecentlyMoved = false;
             }
         }
     }
@@ -123,5 +142,14 @@ public class PlayerExplorationMovement : MonoBehaviour
 
         if(running) movementSpeed = currentRunSpeed;
         else movementSpeed = currentWalkSpeed;
+    }
+
+    public void StopMovement(int state)
+    {
+        if(state != (int) GameStateEnum.explore)
+        {
+            OnMove(Vector2.zero);
+            canMove = false;
+        }
     }
 }

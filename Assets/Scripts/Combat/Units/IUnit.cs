@@ -45,10 +45,7 @@ public class IUnit : MonoBehaviour
         {
             outOfMovementThisTurn = value;
             OnCompleteAction();
-            if(outOfActionsThisTurn && outOfMovementThisTurn) 
-            {
-                OnCompleteTurn(this);
-            }
+            if(outOfActionsThisTurn && outOfMovementThisTurn) OnCompleteTurn(this);
         }
     }
 
@@ -97,6 +94,7 @@ public class IUnit : MonoBehaviour
     {
         UnitSpeed = unitSpeed;
         targetClickable.gameObject.SetActive(false);
+        Health = maxHealth;
     }
 
     public virtual void AddUnitToGrid()
@@ -178,6 +176,7 @@ public class IUnit : MonoBehaviour
 
         StopMovement();
         OnEndMoveUnit(path.Count);
+        CombatCameraMovement.Instance.MoveCamera(transform.position);
         StopCoroutine(MoveUnitCo(path, movementDuration));
     }
 

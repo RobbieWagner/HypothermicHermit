@@ -79,7 +79,11 @@ public class CombatManager : MonoBehaviour
 
     public void NextCombatPhase()
     {
-        if(CombatPhase == (int) CombatPhaseEnum.ally) CombatPhase = (int) CombatPhaseEnum.enemy;
+        if(CombatPhase == (int) CombatPhaseEnum.ally) 
+        {
+            CombatPhase = (int) CombatPhaseEnum.enemy;
+            CombatCameraMovement.Instance.canMove = false;
+        }
         else if(CombatPhase == (int) CombatPhaseEnum.enemy) CombatPhase = (int) CombatPhaseEnum.ally;
     }
 
