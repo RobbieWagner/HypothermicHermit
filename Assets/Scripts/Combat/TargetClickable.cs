@@ -5,6 +5,7 @@ using UnityEngine;
 public class TargetClickable : Clickable
 {
     [SerializeField] IUnit unitComponent;
+
     protected override void OnPointerDown()
     {
         CombatManager.Instance.TryTakeAction(Combat.Instance.currentSelectedUnit, unitComponent);

@@ -9,6 +9,7 @@ public enum CombatPhaseEnum
     enemy
 }
 
+// Manages the combat starting and execution
 public class CombatManager : MonoBehaviour
 {
 
@@ -28,6 +29,7 @@ public class CombatManager : MonoBehaviour
             if(value == combatPhase) return;
             combatPhase = value;
             OnPhaseChange(combatPhase);
+            //Debug.Log("phase change " + combatPhase);
         }
     }
 
@@ -75,6 +77,12 @@ public class CombatManager : MonoBehaviour
     public delegate void OnCreateNewCombatDelegate();
     public event OnCreateNewCombatDelegate OnCreateNewCombat;
 
+    public void NextCombatPhase()
+    {
+        if(CombatPhase == (int) CombatPhaseEnum.ally) CombatPhase = (int) CombatPhaseEnum.enemy;
+        else if(CombatPhase == (int) CombatPhaseEnum.enemy) CombatPhase = (int) CombatPhaseEnum.ally;
+    }
+
     public void EnableEnemyClickables(int value)
     {
         //get enemy clickables enabled using Battle Grid
@@ -96,7 +104,6 @@ public class CombatManager : MonoBehaviour
 
     public delegate void OnEndCombatDelegate();
     public event OnEndCombatDelegate OnEndCombat;
-
 
     public void TryTakeAction(IUnit user, IUnit targetUnit)
     {

@@ -516,6 +516,7 @@ MonoBehaviour:
   tileXPos: 0
   tileYPos: 0
   unitSpeed: 5
+  maxHealth: 10
   playerInitialCombatPosition: {x: 0, y: 0}
 --- !u!114 &4441096405913376298
 MonoBehaviour:

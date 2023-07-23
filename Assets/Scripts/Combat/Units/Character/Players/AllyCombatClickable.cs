@@ -35,6 +35,7 @@ public class AllyCombatClickable : Clickable
 
     private void SpendMovement(int spentMovement)
     {
+        ClickState = (int) clickStateEnum.disabled;
         Combat.Instance.DisableTargetClickables();
         movementSpentThisTurn += spentMovement;
         if(movementSpentThisTurn == unitComponent.UnitSpeed) 
@@ -47,6 +48,7 @@ public class AllyCombatClickable : Clickable
 
     private void SpendAction(IUnit unit)
     {
+        ClickState = (int) clickStateEnum.disabled;
         unitComponent.OutOfActionsThisTurn = true;
         if(!unitComponent.OutOfMovementThisTurn) ClickState = (int) clickStateEnum.enabled;
     }
@@ -55,6 +57,7 @@ public class AllyCombatClickable : Clickable
     {
         if(ClickState == (int) clickStateEnum.enabled) 
         {
+            //Debug.Log("enabled");
             base.OnPointerEnter();
             if(CursorController.Instance.clickables[0] == this)
             {
@@ -80,7 +83,7 @@ public class AllyCombatClickable : Clickable
             ClickState = (int) clickStateEnum.selected;
             CursorController.Instance.SetSelectedClickable(this);
             BattleGrid.Instance.DisableAllTileColliders();
-            BattleGrid.Instance.EnableTileColliders(unitComponent.UnitSpeed - movementSpentThisTurn, new Vector2(unitComponent.tileXPos, unitComponent.tileYPos));
+            BattleGrid.Instance.EnableTileColliders(unitComponent.UnitSpeed - movementSpentThisTurn, new Vector2(unitComponent.tileXPos, unitComponent.tileYPos), unitComponent.tileXPos, unitComponent.tileYPos);
             if(!unitComponent.OutOfActionsThisTurn) Combat.Instance.EnableTargetClickables(unitComponent.unitActions[unitComponent.CurrentAction], unitComponent, unitComponent.UnitSpeed - movementSpentThisTurn);
             Combat.Instance.currentSelectedUnit = unitComponent;
             CombatManager.Instance.OnTakeAction += unitComponent.UseUnitAction;

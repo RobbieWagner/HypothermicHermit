@@ -12,9 +12,10 @@ public class Combat : MonoBehaviour
 
     [SerializeField] Canvas canvas;
 
-    [SerializeField] 
+    //[SerializeField] 
     private List<Enemy> enemies;
     private List<Ally> allies;
+    private List<IUnit> currentTurnsUnits;
 
     [HideInInspector] public Character currentSelectedUnit;
 
@@ -38,6 +39,7 @@ public class Combat : MonoBehaviour
 
     public void InitalizeCombat()
     {
+        currentTurnsUnits = new List<IUnit>();
         allies = CombatManager.Instance.characters.OfType<Ally>().ToList();
         enemies = CombatManager.Instance.characters.OfType<Enemy>().ToList();
 
@@ -48,8 +50,27 @@ public class Combat : MonoBehaviour
     {
         if(phase == (int) CombatPhaseEnum.ally) 
         {
-            foreach(Ally ally in allies) ally.StartUnitsTurn();
-            Player.Instance.StartUnitsTurn();
+            foreach(Ally ally in allies) 
+            {
+                EnableCharacterUse(ally);
+            }
+            EnableCharacterUse(Player.Instance);
+        }
+    }
+
+    private void CompleteUnitsTurn(IUnit unit)
+    {
+        currentTurnsUnits.Remove(unit);
+        if(unit.GetType().Equals(typeof(Character)))
+        {
+            Character character =(Character) unit;
+            character.actionClickable.ClickState = (int) clickStateEnum.disabled;
+        }
+        //Debug.Log(unit.gameObject.name);
+        
+        if(currentTurnsUnits.Count == 0)
+        {
+            CombatManager.Instance.NextCombatPhase();
         }
     }
 
@@ -109,6 +130,14 @@ public class Combat : MonoBehaviour
         if(allies != null) foreach(IUnit unit in allies){unit.targetClickable.gameObject.SetActive(false);}
         if(enemies != null) foreach(IUnit unit in enemies){unit.targetClickable.gameObject.SetActive(false);}
         Player.Instance.targetClickable.gameObject.SetActive(false);
+    }
+
+    private void EnableCharacterUse(Character character)
+    {
+        character.StartUnitsTurn();
+        currentTurnsUnits.Add(character);
+        character.OnCompleteTurn += CompleteUnitsTurn;
+        character.actionClickable.ClickState = (int) clickStateEnum.enabled;
     }
 
     public void EndCombat()

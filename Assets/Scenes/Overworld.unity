@@ -500,6 +500,8 @@ MonoBehaviour:
   tileXPos: 0
   tileYPos: 0
   unitSpeed: 0
+  maxHealth: 10
+  actionClickable: {fileID: 0}
   EnemyCombatTrigger: {fileID: 209697806}
   sightDistance: 8
 --- !u!212 &209697808
@@ -1083,6 +1085,8 @@ MonoBehaviour:
   tileXPos: 0
   tileYPos: 0
   unitSpeed: 0
+  maxHealth: 10
+  actionClickable: {fileID: 0}
   EnemyCombatTrigger: {fileID: 470122476}
   sightDistance: 8
 --- !u!58 &470122476
@@ -1306,6 +1310,7 @@ MonoBehaviour:
   tileXPos: 0
   tileYPos: 0
   unitSpeed: 0
+  maxHealth: 0
 --- !u!50 &667128093
 Rigidbody2D:
   serializedVersion: 4
@@ -1411,6 +1416,17 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!114 &800674446 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 2019814317965293908, guid: ce5275360a73d574cb4915b63f3691a8, type: 3}
+  m_PrefabInstance: {fileID: 4441096406987676461}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 502d93d8731e71c42a546eb809147cd7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &889473150
 GameObject:
   m_ObjectHideFlags: 0
@@ -16869,6 +16885,10 @@ PrefabInstance:
       propertyPath: m_IsActive
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 4441096405913376292, guid: ce5275360a73d574cb4915b63f3691a8, type: 3}
+      propertyPath: actionClickable
+      value: 
+      objectReference: {fileID: 800674446}
     - target: {fileID: 4441096405913376302, guid: ce5275360a73d574cb4915b63f3691a8, type: 3}
       propertyPath: m_RootOrder
       value: 5
@@ -16916,6 +16936,10 @@ PrefabInstance:
     - target: {fileID: 4441096405913376303, guid: ce5275360a73d574cb4915b63f3691a8, type: 3}
       propertyPath: m_Name
       value: Character
+      objectReference: {fileID: 0}
+    - target: {fileID: 6386948340608679539, guid: ce5275360a73d574cb4915b63f3691a8, type: 3}
+      propertyPath: m_Name
+      value: ActionClickable
       objectReference: {fileID: 0}
     - target: {fileID: 6923149261926290396, guid: ce5275360a73d574cb4915b63f3691a8, type: 3}
       propertyPath: m_Size.x

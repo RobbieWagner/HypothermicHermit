@@ -5,4 +5,5 @@ using UnityEngine.UI;
 
 public class Character : IUnit
 {
+    [SerializeField] public AllyCombatClickable actionClickable;
 }

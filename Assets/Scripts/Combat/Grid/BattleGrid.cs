@@ -194,16 +194,18 @@ public class BattleGrid : MonoBehaviour
     }
 
     //Enables tiles around a selected unit
-    public void EnableTileColliders(int speed, Vector2 center)
+    public void EnableTileColliders(int speed, Vector2 center, int unitPosX, int unitPosY)
     {
         for(int i = (int)(center.x - speed); i <= (int)(center.x + speed); i++)
         {
             for(int j = (int)(center.y - speed); j <= (int)(center.y + speed); j++)
             {
-                if(tileGrid.grid[i,j].GetTile().collidingUnits.Count == 0) 
+                CombatTile tile = tileGrid.grid[i,j].GetTile();
+                if(tile.collidingUnits.Count == 0) 
                 {
+                    List<Node> path = BattleGrid.Instance.pathFinder.FindPath(unitPosX, unitPosY, i, j);
+                    if(path != null && path.Count <= speed) tile.EnableTrigger(true, true);
                     //Debug.Log("tile " + i + " " + j + "active");
-                    tileGrid.grid[i,j].GetTile().EnableTrigger(true, true);
                 }
             }
         }

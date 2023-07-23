@@ -70,6 +70,29 @@ public class IUnit : MonoBehaviour
     public delegate void OnCompleteActionDelegate();
     public event OnCompleteActionDelegate OnCompleteAction = delegate { };
 
+    [SerializeField] protected int maxHealth = 10;
+    protected int currentHealth;
+    public int Health
+    {
+        get
+        {
+            return currentHealth;
+        }
+        set
+        {
+            if(value == currentHealth) return;
+            currentHealth = value;
+            if(currentHealth <= 0)
+            {
+                OnHealthZero(this);
+            }
+            if(currentHealth > maxHealth) currentHealth = maxHealth;
+        }
+    }
+
+    public delegate void OnHealthZeroDelegate(IUnit unit);
+    public event OnHealthZeroDelegate OnHealthZero = delegate { };
+
     protected virtual void Awake() 
     {
         UnitSpeed = unitSpeed;
@@ -188,10 +211,15 @@ public class IUnit : MonoBehaviour
         }
     }
     #endregion
-    public void StartUnitsTurn()
+    public virtual void StartUnitsTurn()
     {
         OutOfActionsThisTurn = false;
         OutOfMovementThisTurn = false;
+    }
+
+    public virtual void EndUnitsTurn()
+    {
+
     }
 
     public int CalculateDistanceFromUnit(IUnit other)
