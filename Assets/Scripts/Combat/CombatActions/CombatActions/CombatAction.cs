@@ -14,12 +14,15 @@ public class CombatAction : ScriptableObject
     [ContextMenu(nameof(Heal))] void AddHealEffect(){effects.Add(new Heal());}
     [ContextMenu(nameof(StatChange))] void AddStatChangeEffect(){effects.Add(new StatChange());}
 
-    public void Act(IUnit user, IUnit target)
+    public virtual void Act(IUnit user, IUnit target)
     {
-        foreach(ActionEffect effect in effects)
+        if(!user.OutOfActionsThisTurn)
         {
-            effect.TakeAction(user);
+            foreach(ActionEffect effect in effects)
+            {
+                effect.TakeAction(user);
+            }
+            user.OutOfActionsThisTurn = true;
         }
-        user.OutOfActionsThisTurn = true;
     }
 }

@@ -512,7 +512,7 @@ MonoBehaviour:
   animator: {fileID: 4441096405913376297}
   targetClickable: {fileID: 4370613331738213172}
   unitActions:
-  - {fileID: 11400000, guid: 8402837c8db63a04c9a763a28d3034ac, type: 2}
+  - {fileID: 11400000, guid: 780db14787f982b40a3b3fc633336e93, type: 2}
   tileXPos: 0
   tileYPos: 0
   unitSpeed: 5

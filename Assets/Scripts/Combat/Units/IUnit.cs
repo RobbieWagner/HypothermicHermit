@@ -100,9 +100,22 @@ public class IUnit : MonoBehaviour
     public delegate void OnMoveUnitDelegate(IUnit unit);
     public event OnMoveUnitDelegate OnMoveUnit = delegate { };
 
-    public virtual void UseUnitAction(IUnit user, IUnit target)
+    public virtual void UseUnitAction(IUnit target)
     {
-        unitActions[CurrentAction].Act(user, target);
+        StartCoroutine(UseUnitActionCo(target, unitActions[currentAction]));
+    }
+
+    public virtual IEnumerator UseUnitActionCo(IUnit target, CombatAction action)
+    {
+        //if the action is a melee attack, move the ally before attacking
+        if(action.GetType().Equals(typeof(MeleeAttack)))
+        {
+            List<Node> path = BattleGrid.Instance.pathFinder.FindPath(tileXPos, tileYPos, target.tileXPos, target.tileYPos);
+            path.RemoveAt(path.Count-1);
+            yield return StartCoroutine(MoveUnitCo(path));
+        }
+
+        unitActions[CurrentAction].Act(this, target);
         OnAct(this);
     }
 
@@ -128,6 +141,7 @@ public class IUnit : MonoBehaviour
 
     private IEnumerator MoveUnitCo(List<Node> path, float movementDuration = .2f)
     {
+        if(path == null) Debug.Log(";p");
         foreach(Node node in path)
         {
             CombatTile destination = node.GetTile();

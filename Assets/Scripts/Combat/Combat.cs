@@ -90,14 +90,14 @@ public class Combat : MonoBehaviour
                     List<Node> path = pathFinder.FindPath(user.tileXPos, user.tileYPos, node.x, node.y);
                     if(currentPath == null || currentPath.Count > path.Count) 
                     {
-                        Debug.Log("new path found for " + unit.gameObject.name);
+                        //Debug.Log("new path found for " + unit.gameObject.name);
                         currentPath = path;
                     }
                 }
 
                 if(currentPath != null && currentPath.Count < (action.range + unitMovementLeft)) 
                 {
-                    Debug.Log(unit.gameObject.name + currentPath.Count);
+                    //Debug.Log(unit.gameObject.name + currentPath.Count);
                     unit.targetClickable.gameObject.SetActive(true);
                 }
             }

@@ -101,12 +101,12 @@ public class CombatManager : MonoBehaviour
     public void TryTakeAction(IUnit user, IUnit targetUnit)
     {
         //if(can take action)
-        OnTakeAction(user, targetUnit);
+        OnTakeAction(targetUnit);
         BattleGrid.Instance.DisableAllTileColliders();
         CursorController.Instance.UnsetSelectedClickable();
         Combat.Instance.DisableTargetClickables();
     }
 
-    public delegate void OnTakeActionDelegate(IUnit user, IUnit targetUnit);
+    public delegate void OnTakeActionDelegate(IUnit targetUnit);
     public event OnTakeActionDelegate OnTakeAction = delegate {};
 }

@@ -8,6 +8,5 @@ public class ActionEffect
 {
     public virtual void TakeAction(IUnit user)
     {
-        user.OutOfActionsThisTurn = true;
     }
 }

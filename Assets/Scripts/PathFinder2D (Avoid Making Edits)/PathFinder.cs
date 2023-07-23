@@ -50,23 +50,26 @@ public class PathFinder
 
             openList.Remove(current);
             closedList.Add(current);
-
-            foreach (Node neighbor in GetNeighbors(current))
+            
+            if(current.GetTile().collidingUnits.Count == 0 || current == start)
             {
-                if(closedList.Contains(neighbor)) continue;
-
-                int GCost = current.gCost + CalculateDistance(current, neighbor);
-                if(GCost < neighbor.gCost)
+                foreach (Node neighbor in GetNeighbors(current))
                 {
-                    neighbor.cameFromNode = current;
-                    neighbor.gCost = GCost;
-                    neighbor.hCost = CalculateDistance(neighbor, end);
-                    neighbor.CalculateFCost();
+                    if(closedList.Contains(neighbor)) continue;
 
-                    if(!openList.Contains(neighbor))
+                    int GCost = current.gCost + CalculateDistance(current, neighbor);
+                    if(GCost < neighbor.gCost)
                     {
-                        //Debug.Log(neighbor.gCost);
-                        openList.Add(neighbor);
+                        neighbor.cameFromNode = current;
+                        neighbor.gCost = GCost;
+                        neighbor.hCost = CalculateDistance(neighbor, end);
+                        neighbor.CalculateFCost();
+
+                        if(!openList.Contains(neighbor))
+                        {
+                            //Debug.Log(neighbor.gCost);
+                            openList.Add(neighbor);
+                        }
                     }
                 }
             }
@@ -78,28 +81,28 @@ public class PathFinder
     {
         List<Node> neighborNodes = new List<Node>();
 
-        if(node.x - 1 >= 0 && GetNode(node.x - 1, node.y).GetTile().collidingUnits.Count == 0)
+        if(node.x - 1 >= 0)
             neighborNodes.Add(GetNode(node.x - 1, node.y));
-        if(node.y - 1 >= 0 && GetNode(node.x, node.y - 1).GetTile().collidingUnits.Count == 0) 
+        if(node.y - 1 >= 0) 
             neighborNodes.Add(GetNode(node.x, node.y - 1));
-        if(node.y + 1 < grid.GetHeight() && GetNode(node.x, node.y + 1).GetTile().collidingUnits.Count == 0) 
+        if(node.y + 1 < grid.GetHeight()) 
             neighborNodes.Add(GetNode(node.x, node.y + 1));
-        if(node.x + 1 >= 0 && GetNode(node.x + 1, node.y).GetTile().collidingUnits.Count == 0)
+        if(node.x + 1 < grid.GetWidth())
             neighborNodes.Add(GetNode(node.x + 1, node.y));
 
         if(node.x + 1 < grid.GetWidth())
         {
-            if(node.y - 1 >= 0 && GetNode(node.x + 1, node.y - 1).GetTile().collidingUnits.Count == 0) 
+            if(node.y - 1 >= 0) 
                 neighborNodes.Add(GetNode(node.x + 1, node.y - 1));
-            if(node.y + 1 < grid.GetHeight() && GetNode(node.x + 1, node.y + 1).GetTile().collidingUnits.Count == 0) 
+            if(node.y + 1 < grid.GetHeight()) 
                 neighborNodes.Add(GetNode(node.x + 1, node.y + 1));
         }
 
         if(node.x - 1 >= 0)
         {
-            if(node.y - 1 >= 0 && GetNode(node.x - 1, node.y - 1).GetTile().collidingUnits.Count == 0) 
+            if(node.y - 1 >= 0) 
                 neighborNodes.Add(GetNode(node.x - 1, node.y - 1));
-            if(node.y + 1 < grid.GetHeight() && GetNode(node.x - 1, node.y + 1).GetTile().collidingUnits.Count == 0) 
+            if(node.y + 1 < grid.GetHeight()) 
                 neighborNodes.Add(GetNode(node.x - 1, node.y + 1));
         }
 
