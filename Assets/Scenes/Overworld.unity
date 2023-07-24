@@ -387,6 +387,7 @@ MonoBehaviour:
   characters: []
   obstacles: []
   gridWorldCanvas: {fileID: 1501003931}
+  inCombat: 0
 --- !u!114 &152756589
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -718,6 +719,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   CELL_SIZE: 2
+  BORDER_SIZE: 5
   TILE_OFFSET: {x: 0, y: 0.5, z: 0}
   gridSize: {x: 17, y: 11}
   gridUnits: []

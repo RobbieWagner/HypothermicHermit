@@ -11,6 +11,8 @@ public class CombatCameraMovement : MonoBehaviour
     [HideInInspector] public bool canMove;
     [SerializeField] private float cameraSpeed = 5f;
     Vector2 moveDirection;
+    Vector2 lowerMovementBounds;
+    Vector2 upperMovementBounds;
     PlayerControls playerControls;
     Rigidbody2D body;
 
@@ -39,6 +41,13 @@ public class CombatCameraMovement : MonoBehaviour
     private void DeparentCamera()
     {
         transform.parent = null;
+        
+        List<Vector2> bounds = BattleGrid.Instance.CalculateGridBounds();
+        lowerMovementBounds = bounds[0];
+        upperMovementBounds = bounds[1];
+
+        //Debug.Log(lowerMovementBounds.ToString());
+        //Debug.Log(upperMovementBounds.ToString());
     }
 
     private void CameraFollowPlayer()
@@ -63,7 +72,13 @@ public class CombatCameraMovement : MonoBehaviour
     private void FixedUpdate()
     {
         if(canMove)
-        body.velocity = new Vector2(moveDirection.x * cameraSpeed, moveDirection.y * cameraSpeed);
+        {
+            body.velocity = new Vector2(moveDirection.x * cameraSpeed, moveDirection.y * cameraSpeed);
+            if((body.velocity.x > 0 && transform.position.x >= upperMovementBounds.x)
+              || body.velocity.x < 0 && transform.position.x <= lowerMovementBounds.x) body.velocity = new Vector2(0, body.velocity.y);
+            if((body.velocity.y > 0 && transform.position.y >= upperMovementBounds.y)
+              || body.velocity.y < 0 && transform.position.y <= lowerMovementBounds.y) body.velocity = new Vector2(body.velocity.x, 0);
+        }
         else body.velocity = Vector2.zero;
     }
 

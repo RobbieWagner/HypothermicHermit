@@ -13,7 +13,7 @@ public class AllyCombatClickable : Clickable
     private void Awake() 
     {
         ClickState = (int) clickStateEnum.disabled;
-        Manager.Instance.OnGameStateChange += ChangeMovementState;
+        BattleGrid.Instance.OnBattleGridCreated += Enable;
         unitComponent.OnEndMoveUnit += SpendMovement;
         unitComponent.OnAct += SpendAction;
 
@@ -22,10 +22,9 @@ public class AllyCombatClickable : Clickable
         unitComponent.OnCompleteAction += ResetClickable;
     }
 
-    protected virtual void ChangeMovementState(int state)
+    protected virtual void Enable()
     {
-        if(state == (int) GameStateEnum.combat) ClickState = (int) clickStateEnum.enabled;
-        else ClickState = (int) clickStateEnum.disabled;
+        ClickState = (int) clickStateEnum.enabled;
     }
 
     protected virtual void ResetClickable()
@@ -55,7 +54,7 @@ public class AllyCombatClickable : Clickable
 
     protected override void OnPointerEnter()
     {
-        if(ClickState == (int) clickStateEnum.enabled) 
+        if(ClickState == (int) clickStateEnum.enabled && CombatManager.Instance.inCombat) 
         {
             //Debug.Log("enabled");
             base.OnPointerEnter();

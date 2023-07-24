@@ -16,7 +16,7 @@ public enum UnitMoveRanks
 public class BattleGrid : MonoBehaviour
 {
     [SerializeField] private float CELL_SIZE = 1;
-    private int BORDER_SIZE = 1;
+    [SerializeField] private int BORDER_SIZE = 1;
     [SerializeField] public Vector3 TILE_OFFSET;
 
     [SerializeField] private Vector2 gridSize;
@@ -58,8 +58,8 @@ public class BattleGrid : MonoBehaviour
         AddGridUnits();
 
         Vector3 CENTER_OF_GRID = Player.Instance.playerInitialCombatPosition;
-        Vector3 GRID_ORIGIN = new Vector3(CENTER_OF_GRID.x - (gridSize.x/2 * CELL_SIZE) - (BORDER_SIZE/2 * CELL_SIZE) + CELL_SIZE/2, 
-                                          CENTER_OF_GRID.y - (gridSize.y/2 * CELL_SIZE) - (BORDER_SIZE/2 * CELL_SIZE) + CELL_SIZE/2);
+        Vector3 GRID_ORIGIN = new Vector3(CENTER_OF_GRID.x - (gridSize.x/2 * CELL_SIZE) - (BORDER_SIZE/2 * CELL_SIZE) + BORDER_SIZE, 
+                                          CENTER_OF_GRID.y - (gridSize.y/2 * CELL_SIZE) - (BORDER_SIZE/2 * CELL_SIZE) + BORDER_SIZE);
 
         tileGrid = new TileGrid((int)gridSize.x, (int)gridSize.y, CELL_SIZE, GRID_ORIGIN);
         for(int x = -BORDER_SIZE; x < tileGrid.GetWidth() + BORDER_SIZE; x++)
@@ -233,5 +233,19 @@ public class BattleGrid : MonoBehaviour
         //Debug.Log("tileXPos " + posX + " tileYPos " + posY);
         if(posY < tileGrid.grid.GetLength(0) && posX < tileGrid.grid.GetLength(1)) return tileGrid.grid[posX,posY].GetTile();
         return null;
+    }
+
+    // Calculates the positions of the bounds of the grid
+    public List<Vector2> CalculateGridBounds()
+    {
+        List<Vector2> bounds = new List<Vector2>();
+
+        Vector2 lowerBound = tileGrid.grid[0,0].GetTile().transform.position;
+        Vector2 upperBound = tileGrid.grid[tileGrid.grid.GetLength(0)-1,tileGrid.grid.GetLength(1)-1].GetTile().transform.position;
+
+        bounds.Add(lowerBound);
+        bounds.Add(upperBound);
+
+        return bounds;
     }
 }

@@ -56,7 +56,6 @@ public class PlayerExplorationMovement : MonoBehaviour
         hasRecentlyMoved = true;
         if(canMove)
         {
-            Debug.Log("move");
             //check if the player is coming from a stationary state
             if(animator.GetFloat("vertical") == 0 && animator.GetFloat("horizontal") == 0)
             {
@@ -82,7 +81,6 @@ public class PlayerExplorationMovement : MonoBehaviour
     {
         if(canMove)
         {
-            Debug.Log("hi");
             //check if the player is coming from a stationary state
             if(animator.GetFloat("vertical") == 0 && animator.GetFloat("horizontal") == 0)
             {

@@ -60,6 +60,7 @@ public class CombatTile : Clickable
                 allyClickable.unitComponent.MoveUnit(path);
                 BattleGrid.Instance.DisableAllTileColliders();
                 CursorController.Instance.UnsetSelectedClickable();
+                Combat.Instance.DisableTargetClickables();
             }
         }
     }

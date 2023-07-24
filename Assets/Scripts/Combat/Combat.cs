@@ -44,6 +44,7 @@ public class Combat : MonoBehaviour
         enemies = CombatManager.Instance.characters.OfType<Enemy>().ToList();
 
         CombatManager.Instance.CombatPhase = (int) CombatPhaseEnum.ally;
+        CombatManager.Instance.inCombat = true;
 
         OnInitializeCombat();
     }

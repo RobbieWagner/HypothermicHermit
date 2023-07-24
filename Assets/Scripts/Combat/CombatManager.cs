@@ -20,6 +20,8 @@ public class CombatManager : MonoBehaviour
     [HideInInspector] public List<Obstacle> obstacles;
     [SerializeField] public Canvas gridWorldCanvas;
 
+    [HideInInspector] public bool inCombat;
+
     private int combatPhase;
     public int CombatPhase
     {
@@ -54,6 +56,7 @@ public class CombatManager : MonoBehaviour
         obstacles = new List<Obstacle>();
 
         combatPhase = -1;
+        inCombat = false;
     }
 
     private void ToggleCombat(int gameState)
