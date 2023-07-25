@@ -7,6 +7,8 @@ public class CombatAction : ScriptableObject
 {
     [SerializeField] public bool targetsOpponents;
     [SerializeField] public int range;
+    [SerializeField] public ActionInformation actionInfo;
+    [SerializeField] public string actionName;
     //[SerializeField] public bool AOE;
     [SerializeReference] public List<ActionEffect> effects;
 

@@ -11,4 +11,10 @@ public class DealDamage : ActionEffect
         //Debug.Log("damage");
         base.TakeAction(user);
     }
+
+    public override void ConfigureEffectDisplayLine(IUnit user, IUnit target, ActionEffectDisplayLine displayLine)
+    {
+        displayLine.beforeText.text = target.Health.ToString();
+        displayLine.afterText.text = (target.Health - damage).ToString();
+    }
 }

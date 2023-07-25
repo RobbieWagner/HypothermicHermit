@@ -14,6 +14,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   targetsOpponents: 1
   range: 1
+  actionInfo: {fileID: 8960265152437548319, guid: 3d170998ce36b0b428873ce76a8ca781, type: 3}
+  actionName: Damage
   effects:
   - rid: 1234314473676210177
   references:

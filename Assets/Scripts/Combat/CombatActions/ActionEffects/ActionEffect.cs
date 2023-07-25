@@ -9,4 +9,8 @@ public class ActionEffect
     public virtual void TakeAction(IUnit user)
     {
     }
+
+    public virtual void ConfigureEffectDisplayLine(IUnit user, IUnit target, ActionEffectDisplayLine displayLine)
+    {
+    }
 }
