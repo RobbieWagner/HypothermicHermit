@@ -68,12 +68,30 @@ public class Combat : MonoBehaviour
 
         else if(phase == (int) CombatPhaseEnum.enemy)
         {
-            foreach(Enemy enemy in enemies)
+            foreach(Ally ally in allies)
             {
-                Debug.Log("enemy");
+                ally.OnCompleteTurn -= CompleteUnitsTurn;
             }
-            CombatManager.Instance.NextCombatPhase();
+            Player.Instance.OnCompleteTurn -= CompleteUnitsTurn;
+
+            Debug.Log(enemies.Count);
+            currentTurnsUnits.Clear();
+            foreach(Enemy enemy in enemies) currentTurnsUnits.Add((IUnit) enemy);
+            foreach(IUnit enemy in currentTurnsUnits)
+            {
+                enemy.StartUnitsTurn();
+                //Debug.Log("enemy");
+                enemy.OutOfMovementThisTurn = true;
+                enemy.OutOfActionsThisTurn = true;
+            }
+            CompleteEnemiesPhase();
         }
+    }
+
+    private void CompleteEnemiesPhase()
+    {
+        currentTurnsUnits.Clear();
+        CombatManager.Instance.NextCombatPhase();
     }
 
     private void CompleteUnitsTurn(IUnit unit)
