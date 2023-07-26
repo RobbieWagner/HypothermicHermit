@@ -31,7 +31,7 @@ public class CombatManager : MonoBehaviour
             if(value == combatPhase) return;
             combatPhase = value;
             OnPhaseChange(combatPhase);
-            //Debug.Log("phase change " + combatPhase);
+            Debug.Log("phase change " + combatPhase);
         }
     }
 

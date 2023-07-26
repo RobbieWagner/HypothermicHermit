@@ -54,9 +54,8 @@ public class AllyCombatClickable : Clickable
 
     protected override void OnPointerEnter()
     {
-        if(ClickState == (int) clickStateEnum.enabled && CombatManager.Instance.inCombat) 
+        if(ClickState == (int) clickStateEnum.enabled) 
         {
-            //Debug.Log("enabled");
             base.OnPointerEnter();
             if(CursorController.Instance.clickables[0] == this)
             {

@@ -34,7 +34,7 @@ public class CombatCameraMovement : MonoBehaviour
         playerControls = new PlayerControls();
         body = GetComponent<Rigidbody2D>();
 
-        CombatManager.Instance.OnCreateNewCombat += DeparentCamera;
+        BattleGrid.Instance.OnBattleGridCreated += DeparentCamera;
         CombatManager.Instance.OnEndCombat += CameraFollowPlayer;
     }
     
@@ -103,5 +103,7 @@ public class CombatCameraMovement : MonoBehaviour
             .WaitForCompletion();
         StopCoroutine(MoveCamera(position, wasCanMoveTrue, duration));
         if(wasCanMoveTrue) canMove = true;
+
+        StopCoroutine(MoveCamera(position, wasCanMoveTrue, duration));
     }
 }

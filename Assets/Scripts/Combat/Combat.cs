@@ -13,6 +13,7 @@ public class Combat : MonoBehaviour
     [SerializeField] Canvas canvas;
 
     //[SerializeField] 
+    private List<Character> combatUnits;
     private List<Enemy> enemies;
     private List<Ally> allies;
     private List<IUnit> currentTurnsUnits;
@@ -40,11 +41,12 @@ public class Combat : MonoBehaviour
     public void InitalizeCombat()
     {
         currentTurnsUnits = new List<IUnit>();
+
         allies = CombatManager.Instance.characters.OfType<Ally>().ToList();
         enemies = CombatManager.Instance.characters.OfType<Enemy>().ToList();
+        combatUnits = CombatManager.Instance.characters;
 
         CombatManager.Instance.CombatPhase = (int) CombatPhaseEnum.ally;
-        CombatManager.Instance.inCombat = true;
 
         OnInitializeCombat();
     }

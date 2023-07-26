@@ -138,21 +138,26 @@ public class IUnit : MonoBehaviour
 
         unitActions[CurrentAction].Act(this, target);
         OnAct(this);
+
+        StopCoroutine(UseUnitActionCo(target, action));
     }
 
     public delegate void OnActDelegate(IUnit unit);
     public event OnActDelegate OnAct = delegate { };
 
     #region Movement
-    public virtual void MoveUnit(Vector2 newPosition, int spentMovement, float movementDuration = 1f)
+    public virtual IEnumerator MoveUnit(Vector2 newPosition, int spentMovement, float movementDuration = 1f)
     {
         float duration = (1-Mathf.InverseLerp(1,0, transform.position.x));
         StopAllCoroutines();
         StartMovementAnimation(newPosition);
-        transform.DOMove(newPosition, movementDuration, false)
-            .OnComplete(StopMovement);
+        yield return transform.DOMove(newPosition, movementDuration, false)
+            .OnComplete(StopMovement)
+            .WaitForCompletion();
         position = newPosition;
         if(spentMovement > 0) OnEndMoveUnit(spentMovement);
+
+        StopCoroutine(MoveUnit(newPosition, spentMovement, movementDuration));
     }
 
     public virtual void MoveUnit(List<Node> path, float movementDuration = .2f)

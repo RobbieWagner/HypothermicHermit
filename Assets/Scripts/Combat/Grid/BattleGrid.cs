@@ -47,15 +47,21 @@ public class BattleGrid : MonoBehaviour
 
         gridUnits = new List<IUnit>();
 
-        CombatManager.Instance.OnCreateNewCombat += CreateBattleGrid;
+        CombatManager.Instance.OnCreateNewCombat += RunCreateNewGrid;
         CombatManager.Instance.OnEndCombat += DestroyBattleGrid;
     }
 
     //Instantiate units, then display the grid based off combat units
     //*Instantiate at the start of run time to not take up processing time*    
-    private void CreateBattleGrid()
+    private void RunCreateNewGrid()
+    {
+        StartCoroutine(CreateNewGrid());
+    }
+
+    private IEnumerator CreateNewGrid()
     {
         AddGridUnits();
+        yield return StartCoroutine(MoveUnitsT(gridUnits));
 
         Vector3 CENTER_OF_GRID = Player.Instance.playerInitialCombatPosition;
         Vector3 GRID_ORIGIN = new Vector3(CENTER_OF_GRID.x - (gridSize.x/2 * CELL_SIZE) - (BORDER_SIZE/2 * CELL_SIZE) + BORDER_SIZE, 
@@ -84,8 +90,12 @@ public class BattleGrid : MonoBehaviour
 
         pathFinder = new PathFinder(tileGrid);
 
+        EnableTileColliders();
+        yield return null;
         TrackUnitPositions();
         DisableAllTileColliders();
+        OnBattleGridCreated();
+        StopCoroutine(CreateNewGrid());
     }
 
     private void DestroyBattleGrid()
@@ -109,15 +119,12 @@ public class BattleGrid : MonoBehaviour
         gridUnits = gridUnits.OrderBy(unit => FindUnitMoveRank(unit)).ToList();
         CombatManager.Instance.characters = gridUnits.OfType<Character>().ToList();
         CombatManager.Instance.obstacles = gridUnits.OfType<Obstacle>().ToList();
-        MoveUnitsT(gridUnits);
-
-        OnBattleGridCreated();
     }
     
     public delegate void CreateBattleGridDelegate();
     public CreateBattleGridDelegate OnBattleGridCreated;
 
-    public void MoveUnitsT(List<IUnit> units)
+    private IEnumerator MoveUnitsT(List<IUnit> units)
     {
         unitPositions = new List<Vector2>();
 
@@ -134,11 +141,17 @@ public class BattleGrid : MonoBehaviour
                     unitPosition = GameGrid.Instance.GetTilePosition(FindClosestNearbyTile(unit), CELL_SIZE);
                     attemptsToFindEmptyTile++;
                 }
-                unit.MoveUnit(unitPosition, 0);
             }
+
+            //yield only the last one so they all move at the same time at combat start
+            if(i < units.Count-1) StartCoroutine(unit.MoveUnit(unitPosition, 0));
+            else yield return StartCoroutine(unit.MoveUnit(unitPosition, 0));
+
 
             unitPositions.Add(unitPosition);
         }
+
+        StopCoroutine(MoveUnitsT(units));
     }
 
     public int FindUnitMoveRank(IUnit unit)

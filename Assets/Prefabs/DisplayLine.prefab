@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 2049104651950815812}
   - component: {fileID: 2049104651950815813}
   - component: {fileID: 2049104651950815818}
+  - component: {fileID: 8537196917203953081}
   m_Layer: 5
   m_Name: DisplayLine
   m_TagString: Untagged
@@ -39,7 +40,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 100, y: 100}
+  m_SizeDelta: {x: 100, y: 25}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &2049104651950815813
 MonoBehaviour:
@@ -82,6 +83,26 @@ MonoBehaviour:
   beforeText: {fileID: 2049104653441503983}
   effectImage: {fileID: 2049104653773642758}
   afterText: {fileID: 2049104652562674357}
+--- !u!114 &8537196917203953081
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2049104651950815815}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 306cc8c2b49d7114eaa3623786fc2126, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_IgnoreLayout: 0
+  m_MinWidth: -1
+  m_MinHeight: 25
+  m_PreferredWidth: -1
+  m_PreferredHeight: 25
+  m_FlexibleWidth: -1
+  m_FlexibleHeight: 25
+  m_LayoutPriority: 1
 --- !u!1 &2049104652562674359
 GameObject:
   m_ObjectHideFlags: 0

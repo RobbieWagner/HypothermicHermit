@@ -27,9 +27,10 @@ public class Player : Character
         
     }
 
-    public override void MoveUnit(Vector2 newPosition, int spentMovement, float movementDuration = 1f)
+    public override IEnumerator MoveUnit(Vector2 newPosition, int spentMovement, float movementDuration = 1f)
     {
         playerInitialCombatPosition = newPosition;
-        base.MoveUnit(newPosition, spentMovement);
+        yield return StartCoroutine(base.MoveUnit(newPosition, spentMovement));
+        StopCoroutine(MoveUnit(newPosition, spentMovement, movementDuration));
     }
 }
