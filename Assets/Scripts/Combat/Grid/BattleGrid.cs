@@ -213,12 +213,15 @@ public class BattleGrid : MonoBehaviour
         {
             for(int j = (int)(center.y - speed); j <= (int)(center.y + speed); j++)
             {
-                CombatTile tile = tileGrid.grid[i,j].GetTile();
-                if(tile.collidingUnits.Count == 0) 
+                if(i >= 0 && i < tileGrid.grid.GetLength(0) && j >= 0 && j < tileGrid.grid.GetLength(1))
                 {
-                    List<Node> path = BattleGrid.Instance.pathFinder.FindPath(unitPosX, unitPosY, i, j);
-                    if(path != null && path.Count <= speed) tile.EnableTrigger(true, true);
-                    //Debug.Log("tile " + i + " " + j + "active");
+                    CombatTile tile = tileGrid.grid[i,j].GetTile();
+                    if(tile.collidingUnits.Count == 0) 
+                    {
+                        List<Node> path = BattleGrid.Instance.pathFinder.FindPath(unitPosX, unitPosY, i, j);
+                        if(path != null && path.Count <= speed) tile.EnableTrigger(true, true);
+                        //Debug.Log("tile " + i + " " + j + "active");
+                    }
                 }
             }
         }

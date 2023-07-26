@@ -31,7 +31,6 @@ public class CombatManager : MonoBehaviour
             if(value == combatPhase) return;
             combatPhase = value;
             OnPhaseChange(combatPhase);
-            Debug.Log("phase change " + combatPhase);
         }
     }
 
@@ -87,7 +86,10 @@ public class CombatManager : MonoBehaviour
             CombatPhase = (int) CombatPhaseEnum.enemy;
             CombatCameraMovement.Instance.canMove = false;
         }
-        else if(CombatPhase == (int) CombatPhaseEnum.enemy) CombatPhase = (int) CombatPhaseEnum.ally;
+        else if(CombatPhase == (int) CombatPhaseEnum.enemy) 
+        {
+            CombatPhase = (int) CombatPhaseEnum.ally;
+        }
     }
 
     public void EnableEnemyClickables(int value)

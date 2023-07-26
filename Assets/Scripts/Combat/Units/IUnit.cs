@@ -167,7 +167,6 @@ public class IUnit : MonoBehaviour
 
     private IEnumerator MoveUnitCo(List<Node> path, float movementDuration = .2f)
     {
-        if(path == null) Debug.Log(";p");
         foreach(Node node in path)
         {
             CombatTile destination = node.GetTile();
@@ -220,6 +219,8 @@ public class IUnit : MonoBehaviour
         //Need to set up ally properly
         OutOfActionsThisTurn = false;
         OutOfMovementThisTurn = false;
+
+        OnStartUnitsTurn();
     }
 
     public delegate void OnStartUnitsTurnDelegate();
