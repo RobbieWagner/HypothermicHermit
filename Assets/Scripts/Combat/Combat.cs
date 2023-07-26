@@ -65,6 +65,15 @@ public class Combat : MonoBehaviour
             EnableCharacterUse(Player.Instance);
             CombatCameraMovement.Instance.canMove = true;
         }
+
+        else if(phase == (int) CombatPhaseEnum.enemy)
+        {
+            foreach(Enemy enemy in enemies)
+            {
+                Debug.Log("enemy");
+            }
+            CombatManager.Instance.NextCombatPhase();
+        }
     }
 
     private void CompleteUnitsTurn(IUnit unit)

@@ -217,9 +217,13 @@ public class IUnit : MonoBehaviour
     #endregion
     public virtual void StartUnitsTurn()
     {
+        //Need to set up ally properly
         OutOfActionsThisTurn = false;
         OutOfMovementThisTurn = false;
     }
+
+    public delegate void OnStartUnitsTurnDelegate();
+    public event OnStartUnitsTurnDelegate OnStartUnitsTurn = delegate { }; 
 
     public virtual void EndUnitsTurn()
     {

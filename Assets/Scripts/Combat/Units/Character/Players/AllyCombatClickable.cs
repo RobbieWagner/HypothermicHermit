@@ -20,6 +20,7 @@ public class AllyCombatClickable : Clickable
         movementSpentThisTurn = 0;
 
         unitComponent.OnCompleteAction += ResetClickable;
+        unitComponent.OnStartUnitsTurn += RegainSpentResources;
     }
 
     protected virtual void Enable()
@@ -50,6 +51,12 @@ public class AllyCombatClickable : Clickable
         ClickState = (int) clickStateEnum.disabled;
         unitComponent.OutOfActionsThisTurn = true;
         if(!unitComponent.OutOfMovementThisTurn) ClickState = (int) clickStateEnum.enabled;
+    }
+
+    private void RegainSpentResources()
+    {
+        movementSpentThisTurn = 0;
+        actionsSpentThisTurn = 0;
     }
 
     protected override void OnPointerEnter()
