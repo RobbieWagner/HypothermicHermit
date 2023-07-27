@@ -123,7 +123,6 @@ public class IUnit : MonoBehaviour
 
     public virtual void UseUnitAction(IUnit target)
     {
-        Debug.Log("using action");
         StartCoroutine(UseUnitActionCo(target, unitActions[currentAction]));
     }
 
@@ -143,7 +142,6 @@ public class IUnit : MonoBehaviour
         unitActions[CurrentAction].Act(this, target);
         OnAct(this);
 
-        Debug.Log("act");
         StopCoroutine(UseUnitActionCo(target, action));
     }
 

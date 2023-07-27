@@ -121,7 +121,6 @@ public class CombatManager : MonoBehaviour
     public void TryTakeAction(IUnit user, IUnit targetUnit)
     {
         //if(can take action)
-        Debug.Log("try act");
         BattleGrid.Instance.DisableAllTileColliders();
         CursorController.Instance.UnsetSelectedClickable();
         Combat.Instance.DisableTargetClickables();

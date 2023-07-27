@@ -68,23 +68,7 @@ public class Combat : MonoBehaviour
 
         else if(phase == (int) CombatPhaseEnum.enemy)
         {
-            foreach(Ally ally in allies)
-            {
-                ally.OnCompleteTurn -= CompleteUnitsTurn;
-            }
-            Player.Instance.OnCompleteTurn -= CompleteUnitsTurn;
-
-            //Debug.Log(enemies.Count);
-            currentTurnsUnits.Clear();
-            foreach(Enemy enemy in enemies) currentTurnsUnits.Add((IUnit) enemy);
-            foreach(IUnit enemy in currentTurnsUnits)
-            {
-                enemy.StartUnitsTurn();
-                //Debug.Log("enemy");
-                enemy.OutOfMovementThisTurn = true;
-                enemy.OutOfActionsThisTurn = true;
-            }
-            CompleteEnemiesPhase();
+            StartCoroutine(EnemyPhaseCo());
         }
     }
 
@@ -179,5 +163,28 @@ public class Combat : MonoBehaviour
     public void EndCombat()
     {
 
+    }
+
+    private IEnumerator EnemyPhaseCo()
+    {
+        foreach(Ally ally in allies)
+        {
+            ally.OnCompleteTurn -= CompleteUnitsTurn;
+        }
+        Player.Instance.OnCompleteTurn -= CompleteUnitsTurn;
+
+        //Debug.Log(enemies.Count);
+        currentTurnsUnits.Clear();
+        foreach(Enemy enemy in enemies) currentTurnsUnits.Add((IUnit) enemy);
+        foreach(IUnit enemy in currentTurnsUnits)
+        {
+            enemy.StartUnitsTurn();
+            Debug.Log("enemy");
+            enemy.OutOfMovementThisTurn = true;
+            enemy.OutOfActionsThisTurn = true;
+            yield return null;
+        }
+        CompleteEnemiesPhase();
+        StopCoroutine(EnemyPhaseCo());
     }
 }

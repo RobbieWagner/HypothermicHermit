@@ -35,7 +35,6 @@ public class TargetClickable : Clickable
         base.OnPointerDown();
         CursorController.Instance.RemoveClickable(this);
         if(actionInfo != null) CombatHUD.Instance.RemoveActionInformation(actionInfo);
-        gameObject.SetActive(false);
     }
 
     private IUnit GetActingUnit()

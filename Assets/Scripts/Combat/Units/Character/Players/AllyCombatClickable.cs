@@ -60,6 +60,8 @@ public class AllyCombatClickable : Clickable
     {
         movementSpentThisTurn = 0;
         actionsSpentThisTurn = 0;
+        unitComponent.OutOfActionsThisTurn = false;
+        unitComponent.OutOfMovementThisTurn = false;
     }
 
     protected override void OnPointerEnter()
@@ -92,7 +94,10 @@ public class AllyCombatClickable : Clickable
             CursorController.Instance.SetSelectedClickable(this);
             BattleGrid.Instance.DisableAllTileColliders();
             BattleGrid.Instance.EnableTileColliders(unitComponent.UnitSpeed - movementSpentThisTurn, new Vector2(unitComponent.tileXPos, unitComponent.tileYPos), unitComponent.tileXPos, unitComponent.tileYPos);
-            if(!unitComponent.OutOfActionsThisTurn) Combat.Instance.EnableTargetClickables(unitComponent.unitActions[unitComponent.CurrentAction], unitComponent, unitComponent.UnitSpeed - movementSpentThisTurn);
+            if(!unitComponent.OutOfActionsThisTurn) 
+            {
+                Combat.Instance.EnableTargetClickables(unitComponent.unitActions[unitComponent.CurrentAction], unitComponent, unitComponent.UnitSpeed - movementSpentThisTurn);
+            }
             Combat.Instance.currentSelectedUnit = unitComponent;
             CombatManager.Instance.OnTakeAction += unitComponent.UseUnitAction;
             CombatCameraMovement.Instance.MoveCamera(transform.position);
