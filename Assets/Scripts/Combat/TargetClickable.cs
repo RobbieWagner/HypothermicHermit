@@ -44,7 +44,7 @@ public class TargetClickable : Clickable
         AllyCombatClickable actingAlly = null;
         if(actingClickable.GetType().Equals(typeof(AllyCombatClickable))) actingAlly = (AllyCombatClickable) actingClickable;
         if(actingAlly != null) return actingAlly.unitComponent;
-        Debug.Log("oopsie");
+        //Debug.Log("oopsie");
         return null;
     }
 }

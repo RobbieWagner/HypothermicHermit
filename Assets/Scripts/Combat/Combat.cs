@@ -74,7 +74,7 @@ public class Combat : MonoBehaviour
             }
             Player.Instance.OnCompleteTurn -= CompleteUnitsTurn;
 
-            Debug.Log(enemies.Count);
+            //Debug.Log(enemies.Count);
             currentTurnsUnits.Clear();
             foreach(Enemy enemy in enemies) currentTurnsUnits.Add((IUnit) enemy);
             foreach(IUnit enemy in currentTurnsUnits)

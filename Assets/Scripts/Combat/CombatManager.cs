@@ -82,7 +82,7 @@ public class CombatManager : MonoBehaviour
 
     public void NextCombatPhase()
     {
-        Debug.Log("phase change " + CombatPhase);
+        //Debug.Log("phase change " + CombatPhase);
         if(CombatPhase == (int) CombatPhaseEnum.ally) 
         {
             //Debug.Log("hi");
@@ -121,10 +121,11 @@ public class CombatManager : MonoBehaviour
     public void TryTakeAction(IUnit user, IUnit targetUnit)
     {
         //if(can take action)
-        OnTakeAction(targetUnit);
+        Debug.Log("try act");
         BattleGrid.Instance.DisableAllTileColliders();
         CursorController.Instance.UnsetSelectedClickable();
         Combat.Instance.DisableTargetClickables();
+        OnTakeAction(targetUnit);
     }
 
     public delegate void OnTakeActionDelegate(IUnit targetUnit);

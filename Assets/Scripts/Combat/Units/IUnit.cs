@@ -123,6 +123,7 @@ public class IUnit : MonoBehaviour
 
     public virtual void UseUnitAction(IUnit target)
     {
+        Debug.Log("using action");
         StartCoroutine(UseUnitActionCo(target, unitActions[currentAction]));
     }
 
@@ -132,13 +133,17 @@ public class IUnit : MonoBehaviour
         if(action.GetType().Equals(typeof(MeleeAttack)))
         {
             List<Node> path = BattleGrid.Instance.pathFinder.FindPath(tileXPos, tileYPos, target.tileXPos, target.tileYPos);
-            path.RemoveAt(path.Count-1);
-            yield return StartCoroutine(MoveUnitCo(path));
+            if(path.Count > 0)
+            {
+                path.RemoveAt(path.Count-1);
+                yield return StartCoroutine(MoveUnitCo(path));
+            }
         }
 
         unitActions[CurrentAction].Act(this, target);
         OnAct(this);
 
+        Debug.Log("act");
         StopCoroutine(UseUnitActionCo(target, action));
     }
 
@@ -155,7 +160,10 @@ public class IUnit : MonoBehaviour
             .OnComplete(StopMovement)
             .WaitForCompletion();
         position = newPosition;
-        if(spentMovement > 0) OnEndMoveUnit(spentMovement);
+        if(spentMovement > 0) 
+        {
+            OnEndMoveUnit(spentMovement);
+        }
 
         StopCoroutine(MoveUnit(newPosition, spentMovement, movementDuration));
     }
@@ -179,6 +187,7 @@ public class IUnit : MonoBehaviour
         }
 
         StopMovement();
+        //Debug.Log("moved");
         OnEndMoveUnit(path.Count);
         CombatCameraMovement.Instance.MoveCamera(transform.position);
         StopCoroutine(MoveUnitCo(path, movementDuration));

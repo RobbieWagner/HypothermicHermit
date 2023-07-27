@@ -44,13 +44,16 @@ public class AllyCombatClickable : Clickable
             if(!unitComponent.OutOfActionsThisTurn) ClickState = (int) clickStateEnum.enabled;
         }
         else ClickState = (int) clickStateEnum.enabled;
+        CombatManager.Instance.OnTakeAction -= unitComponent.UseUnitAction;
     }
 
     private void SpendAction(IUnit unit)
     {
+        //Debug.Log("action spent");
         ClickState = (int) clickStateEnum.disabled;
         unitComponent.OutOfActionsThisTurn = true;
         if(!unitComponent.OutOfMovementThisTurn) ClickState = (int) clickStateEnum.enabled;
+        CombatManager.Instance.OnTakeAction -= unitComponent.UseUnitAction;
     }
 
     private void RegainSpentResources()
