@@ -100,6 +100,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   cursorState: 0
   unitComponent: {fileID: 4441096405913376292}
+  unitHover: {fileID: 5286063204410701194}
 --- !u!61 &650520724412554065
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -508,9 +509,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c526747465204f8438f2095674f7c776, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  unitName: Player
   position: {x: 0, y: 0}
   animator: {fileID: 4441096405913376297}
   targetClickable: {fileID: 4370613331738213172}
+  unitInfo: {fileID: 7875790821129639384, guid: 7e1db875b18203c4b8af94d81ae1332c, type: 3}
   unitActions:
   - {fileID: 11400000, guid: 780db14787f982b40a3b3fc633336e93, type: 2}
   - {fileID: 11400000, guid: 010cceedde31107408c72479795781de, type: 2}
@@ -753,6 +756,7 @@ GameObject:
   - component: {fileID: 3867112001514517677}
   - component: {fileID: 2741721288096616773}
   - component: {fileID: 2019814317965293908}
+  - component: {fileID: 5286063204410701194}
   m_Layer: 6
   m_Name: Clickable
   m_TagString: Player
@@ -815,3 +819,19 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   cursorState: 0
   unitComponent: {fileID: 4441096405913376292}
+--- !u!114 &5286063204410701194
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6386948340608679539}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2799cbfe5120c2b4ea3e9ab160813aae, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  triggerCollider: {fileID: 2741721288096616773}
+  unit: {fileID: 4441096405913376292}
+  unitInfoPrefab: {fileID: 7875790821129639384, guid: 7e1db875b18203c4b8af94d81ae1332c, type: 3}
+  targetClickable: {fileID: 4370613331738213172}

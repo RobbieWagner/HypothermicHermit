@@ -8,11 +8,31 @@ public class TargetClickable : Clickable
     [SerializeField] IUnit unitComponent;
     private bool mouseOver;
     private ActionInformation actionInfo;
+    [SerializeField] private UnitHover unitHover;
 
     private void Awake() 
     {
-        actionInfo = null;    
+        actionInfo = null;  
     }
+
+    private void OnEnable() 
+    {
+        unitHover.enabled = false;
+        unitHover.gameObject.SetActive(false);
+        Debug.Log("hi");
+    }
+
+    private void OnDisable() 
+    {
+        unitHover.gameObject.SetActive(true);
+        unitHover.enabled = true;
+        Debug.Log("bye");
+
+        OnDisableTarget();
+    }
+
+    public delegate void OnDisableTargetDelegate();
+    public event OnDisableTargetDelegate OnDisableTarget = delegate {};
 
     protected override void OnPointerEnter()
     {

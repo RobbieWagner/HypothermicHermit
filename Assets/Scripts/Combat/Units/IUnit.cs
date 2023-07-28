@@ -6,10 +6,14 @@ using DG.Tweening;
 
 public class IUnit : MonoBehaviour
 {
+
+    [SerializeField] public string unitName;
+
     [HideInInspector] public Vector2 position;
     [SerializeField] private Animator animator;
 
     public TargetClickable targetClickable;
+    [SerializeField] public UnitInformation unitInfo;
 
     public List<CombatAction> unitActions;
     private int currentAction;
@@ -101,7 +105,7 @@ public class IUnit : MonoBehaviour
         }
     }
 
-    [SerializeField] protected int maxHealth = 10;
+    [SerializeField] public int maxHealth = 10;
     protected int currentHealth;
     public int Health
     {

@@ -9,7 +9,7 @@ public class AllyCombatClickable : Clickable
     public Character unitComponent;
     private int movementSpentThisTurn;
     private int actionsSpentThisTurn;
-
+    
     private void Awake() 
     {
         ClickState = (int) clickStateEnum.disabled;
