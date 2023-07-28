@@ -20,8 +20,12 @@ public class IUnit : MonoBehaviour
         {
             if(currentAction == value % unitActions.Count) return;
             currentAction = value % unitActions.Count;
+            OnActionChange();
         }
     }
+
+    public delegate void OnActionChangeDelegate();
+    public event OnActionChangeDelegate OnActionChange = delegate { };
 
     public int tileXPos;
     public int tileYPos;

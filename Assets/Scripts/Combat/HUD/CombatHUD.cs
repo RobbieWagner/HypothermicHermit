@@ -43,6 +43,15 @@ public class CombatHUD : MonoBehaviour
         return null;
     }
 
+    public void RemoveAllActionInformation()
+    {
+        foreach(ActionInformation actionInfo in displayedActionInformation)
+        {
+            Destroy(actionInfo.gameObject);
+        }
+        displayedActionInformation.Clear();
+    }
+
     private void FixedUpdate() 
     {
         Vector2 mousePos = Camera.main.ScreenToViewportPoint(Mouse.current.position.ReadValue());

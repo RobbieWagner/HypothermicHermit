@@ -33,4 +33,14 @@ public class Player : Character
         yield return StartCoroutine(base.MoveUnit(newPosition, spentMovement));
         StopCoroutine(MoveUnit(newPosition, spentMovement, movementDuration));
     }
+
+    protected void OnActionSelectionUp()
+    {
+        CurrentAction++;
+    }
+
+    protected void OnActionSelectionDown()
+    {
+        CurrentAction--;
+    }
 }

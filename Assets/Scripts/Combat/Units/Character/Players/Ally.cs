@@ -15,4 +15,14 @@ public class Ally : Character
     {
         
     }
+
+    protected void OnActionSelectionUp()
+    {
+        CurrentAction++;
+    }
+
+    protected void OnActionSelectionDown()
+    {
+        CurrentAction--;
+    }
 }

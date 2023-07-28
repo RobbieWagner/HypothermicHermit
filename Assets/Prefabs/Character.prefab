@@ -513,11 +513,12 @@ MonoBehaviour:
   targetClickable: {fileID: 4370613331738213172}
   unitActions:
   - {fileID: 11400000, guid: 780db14787f982b40a3b3fc633336e93, type: 2}
+  - {fileID: 11400000, guid: 010cceedde31107408c72479795781de, type: 2}
   tileXPos: 0
   tileYPos: 0
   unitSpeed: 5
   maxHealth: 10
-  actionClickable: {fileID: 0}
+  actionClickable: {fileID: 2019814317965293908}
   playerInitialCombatPosition: {x: 0, y: 0}
 --- !u!114 &4441096405913376298
 MonoBehaviour:

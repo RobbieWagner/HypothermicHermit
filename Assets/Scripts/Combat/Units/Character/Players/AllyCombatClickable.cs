@@ -21,6 +21,7 @@ public class AllyCombatClickable : Clickable
 
         unitComponent.OnCompleteAction += ResetClickable;
         unitComponent.OnStartUnitsTurn += RegainSpentResources;
+        unitComponent.OnActionChange += DisplayActionTiles;
     }
 
     protected virtual void Enable()
@@ -92,17 +93,29 @@ public class AllyCombatClickable : Clickable
         {
             ClickState = (int) clickStateEnum.selected;
             CursorController.Instance.SetSelectedClickable(this);
-            BattleGrid.Instance.DisableAllTileColliders();
-            BattleGrid.Instance.EnableTileColliders(unitComponent.UnitSpeed - movementSpentThisTurn, new Vector2(unitComponent.tileXPos, unitComponent.tileYPos), unitComponent.tileXPos, unitComponent.tileYPos);
-            if(!unitComponent.OutOfActionsThisTurn) 
-            {
-                Combat.Instance.EnableTargetClickables(unitComponent.unitActions[unitComponent.CurrentAction], unitComponent, unitComponent.UnitSpeed - movementSpentThisTurn);
-            }
+            
+            DisplayActionTiles();
+
             Combat.Instance.currentSelectedUnit = unitComponent;
             CombatManager.Instance.OnTakeAction += unitComponent.UseUnitAction;
             CombatCameraMovement.Instance.MoveCamera(transform.position);
 
             base.OnPointerDown();
+        }
+    }
+
+    protected void DisplayActionTiles()
+    {
+        if(CursorController.Instance.selectedClickable == this)
+        {
+            BattleGrid.Instance.DisableAllTileColliders();
+            Combat.Instance.DisableTargetClickables();
+            CombatHUD.Instance.RemoveAllActionInformation();
+            BattleGrid.Instance.EnableTileColliders(unitComponent.UnitSpeed - movementSpentThisTurn, new Vector2(unitComponent.tileXPos, unitComponent.tileYPos), unitComponent.tileXPos, unitComponent.tileYPos);
+            if(!unitComponent.OutOfActionsThisTurn) 
+            {
+                Combat.Instance.EnableTargetClickables(unitComponent.unitActions[unitComponent.CurrentAction], unitComponent, unitComponent.UnitSpeed - movementSpentThisTurn);
+            }
         }
     }
 }

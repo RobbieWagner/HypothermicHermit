@@ -1,0 +1,22 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dd91786cc618cf34db96eff606c93eed, type: 3}
+  m_Name: Pass
+  m_EditorClassIdentifier: 
+  targetsOpponents: 0
+  range: 0
+  actionInfo: {fileID: 8960265152437548319, guid: 3d170998ce36b0b428873ce76a8ca781, type: 3}
+  actionName: Pass
+  effects: []
+  references:
+    version: 2
+    RefIds: []
