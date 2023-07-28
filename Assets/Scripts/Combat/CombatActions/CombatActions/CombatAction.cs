@@ -22,7 +22,7 @@ public class CombatAction : ScriptableObject
         {
             foreach(ActionEffect effect in effects)
             {
-                effect.TakeAction(user);
+                effect.TakeAction(user, target);
             }
             user.OutOfActionsThisTurn = true;
         }

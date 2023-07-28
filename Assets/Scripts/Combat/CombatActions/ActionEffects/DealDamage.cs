@@ -6,10 +6,11 @@ public class DealDamage : ActionEffect
 {
     [SerializeField] private int damage;
 
-    public override void TakeAction(IUnit user)
+    public override void TakeAction(IUnit user, IUnit target)
     {
         //Debug.Log("damage");
-        base.TakeAction(user);
+        target.Health -= damage;
+        base.TakeAction(user, target);
     }
 
     public override void ConfigureEffectDisplayLine(IUnit user, IUnit target, ActionEffectDisplayLine displayLine)

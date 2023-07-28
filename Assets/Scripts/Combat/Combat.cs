@@ -15,7 +15,7 @@ public class Combat : MonoBehaviour
     //[SerializeField] 
     private List<Character> combatUnits;
     private List<Enemy> enemies;
-    private List<Ally> allies;
+    private List<Character> allies;
     private List<IUnit> currentTurnsUnits;
 
     [HideInInspector] public Character currentSelectedUnit;
@@ -42,9 +42,12 @@ public class Combat : MonoBehaviour
     {
         currentTurnsUnits = new List<IUnit>();
 
-        allies = CombatManager.Instance.characters.OfType<Ally>().ToList();
+        allies = CombatManager.Instance.characters.OfType<Ally>().ToList<Character>();
+        allies.Add(Player.Instance);
         enemies = CombatManager.Instance.characters.OfType<Enemy>().ToList();
         combatUnits = CombatManager.Instance.characters;
+
+        foreach(Character character in combatUnits) character.OnHealthZero += KillUnit;
 
         CombatManager.Instance.CombatPhase = (int) CombatPhaseEnum.ally;
 
@@ -58,17 +61,36 @@ public class Combat : MonoBehaviour
     {
         if(phase == (int) CombatPhaseEnum.ally) 
         {
-            foreach(Ally ally in allies) 
+            StartNewRound();
+            foreach(Character ally in allies) 
             {
                 EnableCharacterUse(ally);
             }
-            EnableCharacterUse(Player.Instance);
             CombatCameraMovement.Instance.canMove = true;
         }
 
         else if(phase == (int) CombatPhaseEnum.enemy)
         {
             StartCoroutine(EnemyPhaseCo());
+        }
+    }
+
+    private void StartNewRound()
+    {
+        RemoveDeadUnits();
+    }
+
+    private void RemoveDeadUnits()
+    {
+        enemies.RemoveAll(enemy => enemy.IsDead);
+        allies.RemoveAll(ally => ally.IsDead);
+
+        foreach(Character character in combatUnits)
+        {
+            if(!enemies.Contains(character) && !allies.Contains(character))
+            {
+                character.IsInCombat = false;
+            }
         }
     }
 
@@ -81,6 +103,7 @@ public class Combat : MonoBehaviour
     private void CompleteUnitsTurn(IUnit unit)
     {
         currentTurnsUnits.Remove(unit);
+        CheckForCombatEnd();
         if(unit.GetType().Equals(typeof(Character)))
         {
             Character character =(Character) unit;
@@ -94,9 +117,28 @@ public class Combat : MonoBehaviour
         }
     }
 
+    private void KillUnit(IUnit unit)
+    {
+        StartCoroutine(KillUnitCo(unit));
+    }
+
+    public IEnumerator KillUnitCo(IUnit unit)
+    {
+        unit.IsDead = true;
+        yield return null;
+        if(CombatManager.Instance.CombatPhase == (int) CombatPhaseEnum.ally 
+            && unit.GetType().Equals(typeof(Character)))
+        {
+            unit.OutOfActionsThisTurn = true;
+            unit.OutOfMovementThisTurn = true;
+        }
+
+        StopCoroutine(KillUnitCo(unit));
+    }
+
     public void CheckForCombatEnd()
     {
-        Manager.Instance.GameState = (int) GameStateEnum.explore;
+        //Manager.Instance.GameState = (int) GameStateEnum.explore;
     }
 
     public void EnableTargetClickables(CombatAction action, Character user, int unitMovementLeft)
@@ -116,7 +158,9 @@ public class Combat : MonoBehaviour
         foreach(IUnit unit in targetUnits)
         {
 
-            if(pathFinder.CalculateDistance(combatGrid.grid[unit.tileXPos, unit.tileYPos], combatGrid.grid[user.tileXPos, user.tileYPos]) <= action.range) 
+            if(!unit.IsDead
+                && pathFinder.CalculateDistance(combatGrid.grid[unit.tileXPos, unit.tileYPos], combatGrid.grid[user.tileXPos, user.tileYPos])
+                   <= action.range) 
             {
                 unit.targetClickable.gameObject.SetActive(true);
             }
@@ -167,7 +211,7 @@ public class Combat : MonoBehaviour
 
     private IEnumerator EnemyPhaseCo()
     {
-        foreach(Ally ally in allies)
+        foreach(Character ally in allies)
         {
             ally.OnCompleteTurn -= CompleteUnitsTurn;
         }
@@ -178,11 +222,13 @@ public class Combat : MonoBehaviour
         foreach(Enemy enemy in enemies) currentTurnsUnits.Add((IUnit) enemy);
         foreach(IUnit enemy in currentTurnsUnits)
         {
-            enemy.StartUnitsTurn();
-            Debug.Log("enemy");
-            enemy.OutOfMovementThisTurn = true;
-            enemy.OutOfActionsThisTurn = true;
-            yield return null;
+            if(!enemy.IsDead)
+            {
+                enemy.StartUnitsTurn();
+                enemy.OutOfMovementThisTurn = true;
+                enemy.OutOfActionsThisTurn = true;
+                yield return null;           
+            }
         }
         CompleteEnemiesPhase();
         StopCoroutine(EnemyPhaseCo());

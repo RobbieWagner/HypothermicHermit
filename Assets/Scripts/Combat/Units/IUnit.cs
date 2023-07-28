@@ -43,6 +43,7 @@ public class IUnit : MonoBehaviour
         get{return outOfMovementThisTurn;}
         set
         {
+            if(value == outOfMovementThisTurn) return;
             outOfMovementThisTurn = value;
             OnCompleteAction();
             if(outOfActionsThisTurn && outOfMovementThisTurn) OnCompleteTurn(this);
@@ -55,6 +56,7 @@ public class IUnit : MonoBehaviour
         get{return outOfActionsThisTurn;}
         set
         {
+            if(value == outOfActionsThisTurn) return;
             outOfActionsThisTurn = value;
             OnCompleteAction();
             if(outOfActionsThisTurn && outOfMovementThisTurn) OnCompleteTurn(this);
@@ -66,6 +68,34 @@ public class IUnit : MonoBehaviour
 
     public delegate void OnCompleteActionDelegate();
     public event OnCompleteActionDelegate OnCompleteAction = delegate { };
+
+
+    private bool isDead;
+    public bool IsDead
+    {
+        get{return isDead;}
+        set
+        {
+            if(value == isDead) return;
+            isDead = value;
+
+            //Debug.Log(IsDead + " is unit dead");
+            if(isDead) OnUnitDeath();
+        }
+    }
+    public delegate void OnUnitDeathDelegate();
+    public event OnUnitDeathDelegate OnUnitDeath = delegate { };
+
+    private bool isInCombat;
+    public bool IsInCombat
+    {
+        get{return isInCombat;}
+        set
+        {
+            if(value == isInCombat) return;
+            isInCombat = value;
+        }
+    }
 
     [SerializeField] protected int maxHealth = 10;
     protected int currentHealth;
@@ -95,6 +125,8 @@ public class IUnit : MonoBehaviour
         UnitSpeed = unitSpeed;
         targetClickable.gameObject.SetActive(false);
         Health = maxHealth;
+        IsDead = false;
+        IsInCombat = true;
     }
 
     public virtual void AddUnitToGrid()
@@ -244,5 +276,10 @@ public class IUnit : MonoBehaviour
         int distanceY = Math.Abs(tileYPos - other.tileYPos);
 
         return Math.Max(distanceX, distanceY);
+    }
+
+    public void KillUnit()
+    {
+
     }
 }

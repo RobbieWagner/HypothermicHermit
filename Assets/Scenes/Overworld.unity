@@ -1087,7 +1087,7 @@ MonoBehaviour:
   tileXPos: 0
   tileYPos: 0
   unitSpeed: 0
-  maxHealth: 10
+  maxHealth: 3
   actionClickable: {fileID: 0}
   EnemyCombatTrigger: {fileID: 470122476}
   sightDistance: 8

@@ -66,7 +66,7 @@ public class AllyCombatClickable : Clickable
 
     protected override void OnPointerEnter()
     {
-        if(ClickState == (int) clickStateEnum.enabled) 
+        if(ClickState == (int) clickStateEnum.enabled && !unitComponent.IsDead) 
         {
             base.OnPointerEnter();
             if(CursorController.Instance.clickables[0] == this)
@@ -88,7 +88,7 @@ public class AllyCombatClickable : Clickable
 
     protected override void OnPointerDown()
     {
-        if(ClickState == (int) clickStateEnum.hover)
+        if(ClickState == (int) clickStateEnum.hover && !unitComponent.IsDead)
         {
             ClickState = (int) clickStateEnum.selected;
             CursorController.Instance.SetSelectedClickable(this);

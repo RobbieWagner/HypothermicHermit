@@ -18,7 +18,6 @@ MonoBehaviour:
   actionName: Damage
   effects:
   - rid: 1234314473676210177
-  - rid: 1234314473676210177
   references:
     version: 2
     RefIds:
