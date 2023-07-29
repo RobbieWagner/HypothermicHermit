@@ -171,7 +171,7 @@ public class IUnit : MonoBehaviour
     public virtual IEnumerator UseUnitActionCo(IUnit target, CombatAction action)
     {
         //if the action is a melee attack, move the ally before attacking
-        if(action.GetType().Equals(typeof(MeleeAttack)))
+        if(action is MeleeAttack)
         {
             List<Node> path = BattleGrid.Instance.pathFinder.FindPath(tileXPos, tileYPos, target.tileXPos, target.tileYPos);
             if(path.Count > 0)

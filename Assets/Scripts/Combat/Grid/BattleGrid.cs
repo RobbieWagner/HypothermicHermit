@@ -155,10 +155,9 @@ public class BattleGrid : MonoBehaviour
 
     public int FindUnitMoveRank(IUnit unit)
     {
-        Type unitType = unit.GetType();
-        if(unitType.Equals(typeof(Obstacle))) return (int) UnitMoveRanks.Obstacle;
-        else if(unitType.Equals(typeof(Ally))) return (int) UnitMoveRanks.Ally;
-        else if(unitType.Equals(typeof(Player))) return (int) UnitMoveRanks.Player;
+        if(unit is Obstacle) return (int) UnitMoveRanks.Obstacle;
+        else if(unit is Ally) return (int) UnitMoveRanks.Ally;
+        else if(unit is Player) return (int) UnitMoveRanks.Player;
         else return (int) UnitMoveRanks.Enemy;
     }
 

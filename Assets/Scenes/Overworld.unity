@@ -574,7 +574,8 @@ MonoBehaviour:
   animator: {fileID: 209697811}
   targetClickable: {fileID: 436492925}
   unitInfo: {fileID: 7875790821129639384, guid: 7e1db875b18203c4b8af94d81ae1332c, type: 3}
-  unitActions: []
+  unitActions:
+  - {fileID: 11400000, guid: 780db14787f982b40a3b3fc633336e93, type: 2}
   unitsExploreCollider: {fileID: 209697805}
   tileXPos: 0
   tileYPos: 0
@@ -1167,7 +1168,8 @@ MonoBehaviour:
   animator: {fileID: 470122479}
   targetClickable: {fileID: 456184000}
   unitInfo: {fileID: 7875790821129639384, guid: 7e1db875b18203c4b8af94d81ae1332c, type: 3}
-  unitActions: []
+  unitActions:
+  - {fileID: 11400000, guid: 780db14787f982b40a3b3fc633336e93, type: 2}
   unitsExploreCollider: {fileID: 470122477}
   tileXPos: 0
   tileYPos: 0

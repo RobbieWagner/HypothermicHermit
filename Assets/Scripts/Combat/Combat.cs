@@ -13,7 +13,7 @@ public class Combat : MonoBehaviour
     [SerializeField] Canvas canvas;
 
     //[SerializeField] 
-    private List<Character> combatUnits;
+    public List<Character> combatUnits;
     private List<Enemy> enemies;
     private List<Character> allies;
     private List<IUnit> currentTurnsUnits;
@@ -65,7 +65,7 @@ public class Combat : MonoBehaviour
     {
         if(phase == (int) CombatPhaseEnum.ally) 
         {
-            StartNewRound();
+            StartCoroutine(StartNewRound());
             foreach(Character ally in allies) 
             {
                 EnableCharacterUse(ally);
@@ -79,9 +79,13 @@ public class Combat : MonoBehaviour
         }
     }
 
-    private void StartNewRound()
+    private IEnumerator StartNewRound()
     {
         RemoveDeadUnits();
+
+        yield return StartCoroutine(CombatCameraMovement.Instance.MoveCameraCo(Player.Instance.transform.position));
+
+        StopCoroutine(StartNewRound());
     }
 
     private void RemoveDeadUnits()
@@ -108,7 +112,7 @@ public class Combat : MonoBehaviour
     {
         currentTurnsUnits.Remove(unit);
         CheckForCombatEnd();
-        if(unit.GetType().Equals(typeof(Character)))
+        if(unit is Character)
         {
             Character character =(Character) unit;
             character.actionClickable.ClickState = (int) clickStateEnum.disabled;
@@ -131,7 +135,7 @@ public class Combat : MonoBehaviour
         unit.IsDead = true;
         yield return null;
         if(CombatManager.Instance.CombatPhase == (int) CombatPhaseEnum.ally 
-            && unit.GetType().Equals(typeof(Character)))
+            && unit is Character)
         {
             unit.OutOfActionsThisTurn = true;
             unit.OutOfMovementThisTurn = true;
@@ -145,14 +149,16 @@ public class Combat : MonoBehaviour
         //Manager.Instance.GameState = (int) GameStateEnum.explore;
     }
 
-    public void EnableTargetClickables(CombatAction action, Character user, int unitMovementLeft)
+    public List<IUnit> FindUnitsInRange(CombatAction action, Character user, int unitMovementLeft)
     {
         //Add if statements to check for action type once more are added (Like AOE)
         TileGrid combatGrid = BattleGrid.Instance.tileGrid;
         PathFinder pathFinder = BattleGrid.Instance.pathFinder;
         List<IUnit> targetUnits = new List<IUnit>();
+
+        List<IUnit> targetUnitsInRange = new List<IUnit>();
         
-        if(action.targetsOpponents) targetUnits.AddRange(enemies);
+        if((action.targetsOpponents && (user is Player || user is Ally)) || (!action.targetsOpponents && user is Enemy)) targetUnits.AddRange(enemies);
         else
         {
             targetUnits.Add(Player.Instance);
@@ -161,12 +167,11 @@ public class Combat : MonoBehaviour
 
         foreach(IUnit unit in targetUnits)
         {
-
             if(!unit.IsDead
                 && pathFinder.CalculateDistance(combatGrid.grid[unit.tileXPos, unit.tileYPos], combatGrid.grid[user.tileXPos, user.tileYPos])
                    <= action.range) 
             {
-                unit.targetClickable.gameObject.SetActive(true);
+                targetUnitsInRange.Add(unit);
             }
             else
             {
@@ -187,9 +192,22 @@ public class Combat : MonoBehaviour
                 if(currentPath != null && currentPath.Count < (action.range + unitMovementLeft)) 
                 {
                     //Debug.Log(unit.gameObject.name + currentPath.Count);
-                    unit.targetClickable.gameObject.SetActive(true);
+                    targetUnitsInRange.Add(unit);
                 }
             }
+        }
+
+        //Debug.Log(targetUnitsInRange.Count);
+        return targetUnitsInRange;
+    }
+
+    public void EnableTargetClickables(CombatAction action, Character user, int unitMovementLeft)
+    {
+        List<IUnit> units = FindUnitsInRange(action, user, unitMovementLeft);
+        foreach(IUnit unit in units)
+        {
+            unit.targetClickable.gameObject.SetActive(true);
+            //Debug.Log(unit.name);
         }
     }
 
@@ -231,8 +249,7 @@ public class Combat : MonoBehaviour
             {
                 enemy.StartUnitsTurn();
                 yield return StartCoroutine(enemy.TakeEnemyTurn()); 
-                enemy.OutOfMovementThisTurn = true;
-                enemy.OutOfActionsThisTurn = true;          
+                enemy.OutOfMovementThisTurn = true;         
             }
         }
         CompleteEnemiesPhase();
@@ -243,7 +260,7 @@ public class Combat : MonoBehaviour
     {
         Clickable actingClickable = CursorController.Instance.selectedClickable;
         AllyCombatClickable actingAlly = null;
-        if(actingClickable != null && actingClickable.GetType().Equals(typeof(AllyCombatClickable))) actingAlly = (AllyCombatClickable) actingClickable;
+        if(actingClickable != null && actingClickable is AllyCombatClickable) actingAlly = (AllyCombatClickable) actingClickable;
         if(actingAlly != null) return actingAlly.unitComponent;
         //Debug.Log("oopsie");
         return null;
