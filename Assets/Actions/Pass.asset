@@ -17,9 +17,11 @@ MonoBehaviour:
   actionInfo: {fileID: 8960265152437548319, guid: 3d170998ce36b0b428873ce76a8ca781, type: 3}
   actionName: Pass
   effects:
-  - rid: 1234314610915934208
+  - rid: 1234314622428250112
   references:
     version: 2
     RefIds:
-    - rid: 1234314610915934208
+    - rid: 1234314622428250112
       type: {class: Pass, ns: , asm: Assembly-CSharp}
+      data:
+        actionEffectDisplayedInActionInfo: 0

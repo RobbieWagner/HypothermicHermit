@@ -578,7 +578,7 @@ MonoBehaviour:
   unitsExploreCollider: {fileID: 209697805}
   tileXPos: 0
   tileYPos: 0
-  unitSpeed: 0
+  unitSpeed: 2
   maxHealth: 10
   actionClickable: {fileID: 0}
   EnemyCombatTrigger: {fileID: 209697806}
@@ -1171,7 +1171,7 @@ MonoBehaviour:
   unitsExploreCollider: {fileID: 470122477}
   tileXPos: 0
   tileYPos: 0
-  unitSpeed: 0
+  unitSpeed: 2
   maxHealth: 3
   actionClickable: {fileID: 0}
   EnemyCombatTrigger: {fileID: 470122476}

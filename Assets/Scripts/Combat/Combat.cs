@@ -224,14 +224,15 @@ public class Combat : MonoBehaviour
         //Debug.Log(enemies.Count);
         currentTurnsUnits.Clear();
         foreach(Enemy enemy in enemies) currentTurnsUnits.Add((IUnit) enemy);
-        foreach(IUnit enemy in currentTurnsUnits)
+        foreach(IUnit unit in currentTurnsUnits)
         {
+            Enemy enemy = (Enemy) unit;
             if(!enemy.IsDead)
             {
                 enemy.StartUnitsTurn();
+                yield return StartCoroutine(enemy.TakeEnemyTurn()); 
                 enemy.OutOfMovementThisTurn = true;
-                enemy.OutOfActionsThisTurn = true;
-                yield return null;           
+                enemy.OutOfActionsThisTurn = true;          
             }
         }
         CompleteEnemiesPhase();

@@ -24,8 +24,8 @@ public class IUnit : MonoBehaviour
         get{return currentAction;}
         set
         {
-            if(currentAction == value % unitActions.Count) return;
-            currentAction = value % unitActions.Count;
+            if(currentAction == Math.Abs(value % unitActions.Count)) return;
+            currentAction = Math.Abs(value % unitActions.Count);
             OnActionChange();
         }
     }
@@ -213,7 +213,7 @@ public class IUnit : MonoBehaviour
         StartCoroutine(MoveUnitCo(path, movementDuration));
     }
 
-    private IEnumerator MoveUnitCo(List<Node> path, float movementDuration = .2f)
+    protected IEnumerator MoveUnitCo(List<Node> path, float movementDuration = .2f)
     {
         foreach(Node node in path)
         {

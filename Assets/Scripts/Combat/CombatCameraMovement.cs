@@ -86,7 +86,7 @@ public class CombatCameraMovement : MonoBehaviour
     {
         bool wasCanMoveTrue = canMove;
         Vector3 position = new Vector3(Player.Instance.transform.position.x, Player.Instance.transform.position.y, cameraZPosition);
-        StartCoroutine(MoveCamera(position, wasCanMoveTrue));
+        StartCoroutine(MoveCameraCo(position, wasCanMoveTrue));
     }
 
     public void MoveCamera(Vector2 position)
@@ -94,16 +94,25 @@ public class CombatCameraMovement : MonoBehaviour
         bool wasCanMoveTrue = canMove;
         canMove = false;
         Vector3 newPosition = new Vector3(position.x, position.y, cameraZPosition);
-        StartCoroutine(MoveCamera(newPosition, wasCanMoveTrue));
+        StartCoroutine(MoveCameraCo(newPosition, wasCanMoveTrue));
     }
 
-    private IEnumerator MoveCamera(Vector3 position, bool wasCanMoveTrue, float duration = .4f)
+    public IEnumerator MoveCameraCo(Vector2 position)
+    {
+        bool wasCanMoveTrue = canMove;
+        canMove = false;
+        Vector3 newPosition = new Vector3(position.x, position.y, cameraZPosition);
+        yield return StartCoroutine(MoveCameraCo(newPosition, wasCanMoveTrue));
+        
+        StopCoroutine(MoveCameraCo(position));
+    }
+
+    private IEnumerator MoveCameraCo(Vector3 position, bool wasCanMoveTrue, float duration = .4f)
     {
         yield return transform.DOMove(position, duration, false)
             .WaitForCompletion();
-        StopCoroutine(MoveCamera(position, wasCanMoveTrue, duration));
         if(wasCanMoveTrue) canMove = true;
 
-        StopCoroutine(MoveCamera(position, wasCanMoveTrue, duration));
+        StopCoroutine(MoveCameraCo(position, wasCanMoveTrue, duration));
     }
 }

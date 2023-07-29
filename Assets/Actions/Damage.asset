@@ -24,4 +24,5 @@ MonoBehaviour:
     - rid: 1234314473676210177
       type: {class: DealDamage, ns: , asm: Assembly-CSharp}
       data:
+        actionEffectDisplayedInActionInfo: 1
         damage: 1
