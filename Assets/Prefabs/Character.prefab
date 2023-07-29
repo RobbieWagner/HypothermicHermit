@@ -517,6 +517,7 @@ MonoBehaviour:
   unitActions:
   - {fileID: 11400000, guid: 780db14787f982b40a3b3fc633336e93, type: 2}
   - {fileID: 11400000, guid: 010cceedde31107408c72479795781de, type: 2}
+  unitsExploreCollider: {fileID: 4441096405913376293}
   tileXPos: 0
   tileYPos: 0
   unitSpeed: 5

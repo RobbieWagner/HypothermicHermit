@@ -17,6 +17,8 @@ public class IUnit : MonoBehaviour
 
     public List<CombatAction> unitActions;
     private int currentAction;
+
+    [SerializeField] public Collider2D unitsExploreCollider;
     public int CurrentAction
     {
         get{return currentAction;}

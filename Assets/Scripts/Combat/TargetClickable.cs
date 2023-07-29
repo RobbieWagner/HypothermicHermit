@@ -19,14 +19,12 @@ public class TargetClickable : Clickable
     {
         unitHover.enabled = false;
         unitHover.gameObject.SetActive(false);
-        Debug.Log("hi");
     }
 
     private void OnDisable() 
     {
         unitHover.gameObject.SetActive(true);
         unitHover.enabled = true;
-        Debug.Log("bye");
 
         OnDisableTarget();
     }

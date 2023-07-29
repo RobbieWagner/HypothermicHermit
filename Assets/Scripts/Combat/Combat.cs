@@ -47,7 +47,11 @@ public class Combat : MonoBehaviour
         enemies = CombatManager.Instance.characters.OfType<Enemy>().ToList();
         combatUnits = CombatManager.Instance.characters;
 
-        foreach(Character character in combatUnits) character.OnHealthZero += KillUnit;
+        foreach(Character character in combatUnits) 
+        {
+            character.OnHealthZero += KillUnit;
+            character.unitsExploreCollider.enabled = false;
+        }
 
         CombatManager.Instance.CombatPhase = (int) CombatPhaseEnum.ally;
 

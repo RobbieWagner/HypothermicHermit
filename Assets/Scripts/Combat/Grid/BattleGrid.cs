@@ -141,11 +141,10 @@ public class BattleGrid : MonoBehaviour
                     unitPosition = GameGrid.Instance.GetTilePosition(FindClosestNearbyTile(unit), CELL_SIZE);
                     attemptsToFindEmptyTile++;
                 }
+                //yield only the last one so they all move at the same time at combat start
+                if(i < units.Count-1) StartCoroutine(unit.MoveUnit(unitPosition, 0));
+                else yield return StartCoroutine(unit.MoveUnit(unitPosition, 0));
             }
-
-            //yield only the last one so they all move at the same time at combat start
-            if(i < units.Count-1) StartCoroutine(unit.MoveUnit(unitPosition, 0));
-            else yield return StartCoroutine(unit.MoveUnit(unitPosition, 0));
 
 
             unitPositions.Add(unitPosition);

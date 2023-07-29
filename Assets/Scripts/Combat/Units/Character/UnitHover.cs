@@ -22,7 +22,6 @@ public class UnitHover : MonoBehaviour, IPointerEnterHandler, IPointerExitHandle
 
     private void EnableHover()
     {
-        Debug.Log("enabled");
         triggerCollider.enabled = true;
     }
 

@@ -134,7 +134,7 @@ GameObject:
   - component: {fileID: 13116863}
   - component: {fileID: 13116862}
   - component: {fileID: 13116861}
-  m_Layer: 6
+  m_Layer: 3
   m_Name: UnitHover
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -575,6 +575,7 @@ MonoBehaviour:
   targetClickable: {fileID: 436492925}
   unitInfo: {fileID: 7875790821129639384, guid: 7e1db875b18203c4b8af94d81ae1332c, type: 3}
   unitActions: []
+  unitsExploreCollider: {fileID: 209697805}
   tileXPos: 0
   tileYPos: 0
   unitSpeed: 0
@@ -1167,6 +1168,7 @@ MonoBehaviour:
   targetClickable: {fileID: 456184000}
   unitInfo: {fileID: 7875790821129639384, guid: 7e1db875b18203c4b8af94d81ae1332c, type: 3}
   unitActions: []
+  unitsExploreCollider: {fileID: 470122477}
   tileXPos: 0
   tileYPos: 0
   unitSpeed: 0
@@ -1395,6 +1397,7 @@ MonoBehaviour:
   targetClickable: {fileID: 1241517644}
   unitInfo: {fileID: 0}
   unitActions: []
+  unitsExploreCollider: {fileID: 0}
   tileXPos: 0
   tileYPos: 0
   unitSpeed: 0
@@ -17104,7 +17107,7 @@ GameObject:
   - component: {fileID: 1560226854}
   - component: {fileID: 1560226853}
   - component: {fileID: 1560226852}
-  m_Layer: 6
+  m_Layer: 3
   m_Name: UnitHover
   m_TagString: Untagged
   m_Icon: {fileID: 0}

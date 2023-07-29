@@ -36,11 +36,13 @@ public class Clickable : MonoBehaviour, IPointerEnterHandler, IPointerExitHandle
 
     protected virtual void OnPointerEnter()
     {
+        Debug.Log("Mouse enter " + gameObject.name);
         CursorController.Instance.AddClickable(this);
     }
 
     protected virtual void OnPointerExit()
     {
+        Debug.Log("Mouse exit " + gameObject.name);
         CursorController.Instance.RemoveClickable(this);
     }
 
