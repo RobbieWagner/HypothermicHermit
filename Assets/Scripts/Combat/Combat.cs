@@ -237,4 +237,14 @@ public class Combat : MonoBehaviour
         CompleteEnemiesPhase();
         StopCoroutine(EnemyPhaseCo());
     }
+
+    public IUnit GetActingUnit()
+    {
+        Clickable actingClickable = CursorController.Instance.selectedClickable;
+        AllyCombatClickable actingAlly = null;
+        if(actingClickable != null && actingClickable.GetType().Equals(typeof(AllyCombatClickable))) actingAlly = (AllyCombatClickable) actingClickable;
+        if(actingAlly != null) return actingAlly.unitComponent;
+        //Debug.Log("oopsie");
+        return null;
+    }
 }

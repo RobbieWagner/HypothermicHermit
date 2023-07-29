@@ -36,11 +36,15 @@ public class Player : Character
 
     protected void OnActionSelectionUp()
     {
-        CurrentAction++;
+        IUnit unit = null;
+        if(Combat.Instance != null) unit = Combat.Instance.GetActingUnit();
+        if(unit != null && unit == this) CurrentAction++;
     }
 
     protected void OnActionSelectionDown()
     {
-        CurrentAction--;
+        IUnit unit = null;
+        if(Combat.Instance != null) unit = Combat.Instance.GetActingUnit();
+        if(unit != null && unit == this) CurrentAction--;
     }
 }

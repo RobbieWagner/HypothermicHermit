@@ -6,6 +6,8 @@ using UnityEngine;
 [Serializable]
 public class ActionEffect
 {
+    public bool actionEffectDisplayedInActionInfo;
+
     public virtual void TakeAction(IUnit user, IUnit target)
     {
     }

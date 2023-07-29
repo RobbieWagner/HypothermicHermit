@@ -19,8 +19,11 @@ public class ActionInformation : MonoBehaviour
         displayLines = new ActionEffectDisplayLine[action.effects.Count];
         for(int i = 0; i < displayLines.Length; i++)
         {
-            displayLines[i] = Instantiate(displayLinePrefab, panel.transform);
-            action.effects[i].ConfigureEffectDisplayLine(user, target, displayLines[i]);
+            if(action.effects[i].actionEffectDisplayedInActionInfo)
+            {
+                displayLines[i] = Instantiate(displayLinePrefab, panel.transform);
+                action.effects[i].ConfigureEffectDisplayLine(user, target, displayLines[i]);
+            }
         }
     }
 }

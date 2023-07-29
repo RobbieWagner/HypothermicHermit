@@ -35,7 +35,7 @@ public class TargetClickable : Clickable
     protected override void OnPointerEnter()
     {
         base.OnPointerEnter();
-        IUnit unit = GetActingUnit();
+        IUnit unit = Combat.Instance.GetActingUnit();
         if(unit != null) actionInfo = CombatHUD.Instance.AddActionInformation(unit, unitComponent);
     }
 
@@ -53,15 +53,5 @@ public class TargetClickable : Clickable
         base.OnPointerDown();
         CursorController.Instance.RemoveClickable(this);
         if(actionInfo != null) CombatHUD.Instance.RemoveActionInformation(actionInfo);
-    }
-
-    private IUnit GetActingUnit()
-    {
-        Clickable actingClickable = CursorController.Instance.selectedClickable;
-        AllyCombatClickable actingAlly = null;
-        if(actingClickable.GetType().Equals(typeof(AllyCombatClickable))) actingAlly = (AllyCombatClickable) actingClickable;
-        if(actingAlly != null) return actingAlly.unitComponent;
-        //Debug.Log("oopsie");
-        return null;
     }
 }

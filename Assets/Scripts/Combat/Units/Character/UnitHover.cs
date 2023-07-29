@@ -17,7 +17,7 @@ public class UnitHover : MonoBehaviour, IPointerEnterHandler, IPointerExitHandle
         triggerCollider.enabled = false;
 
         targetClickable.OnDisableTarget += EnableHover;
-        CombatManager.Instance.OnCreateNewCombat += EnableHover;
+        BattleGrid.Instance.OnBattleGridCreated += EnableHover;
     }
 
     private void EnableHover()
