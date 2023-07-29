@@ -36,6 +36,7 @@ public class CursorController : MonoBehaviour
             if(value == cursorState) return;
             cursorState = value;
             OnCursorStateChange(cursorState);
+            //Debug.Log(CursorState.ToString());
         }
     }
 

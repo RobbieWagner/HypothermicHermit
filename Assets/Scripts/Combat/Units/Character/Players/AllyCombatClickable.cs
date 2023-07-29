@@ -100,6 +100,7 @@ public class AllyCombatClickable : Clickable
             CombatManager.Instance.OnTakeAction += unitComponent.UseUnitAction;
             CombatCameraMovement.Instance.MoveCamera(transform.position);
 
+            CursorController.Instance.RemoveClickable(this);
             base.OnPointerDown();
         }
     }
