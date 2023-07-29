@@ -15,6 +15,7 @@ public class CombatAction : ScriptableObject
     [ContextMenu(nameof(DealDamage))] void AddDamageEffect(){effects.Add(new DealDamage());}
     [ContextMenu(nameof(Heal))] void AddHealEffect(){effects.Add(new Heal());}
     [ContextMenu(nameof(StatChange))] void AddStatChangeEffect(){effects.Add(new StatChange());}
+    [ContextMenu(nameof(Pass))] void AddPassTurnEffect(){effects.Add(new Pass());}
 
     public virtual void Act(IUnit user, IUnit target)
     {
