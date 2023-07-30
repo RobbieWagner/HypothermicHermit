@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 2049104651950815818}
   - component: {fileID: 8537196917203953081}
   m_Layer: 5
-  m_Name: DisplayLine
+  m_Name: ActionDisplayLine
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
