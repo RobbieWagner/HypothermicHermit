@@ -57,7 +57,6 @@ public class IUnit : MonoBehaviour
             outOfMovementThisTurn = value;
             OnCompleteAction();
             if(outOfActionsThisTurn && outOfMovementThisTurn) OnCompleteTurn(this);
-            CursorController.Instance.UnsetSelectedClickable();
         }
     }
 
@@ -71,7 +70,6 @@ public class IUnit : MonoBehaviour
             outOfActionsThisTurn = value;
             OnCompleteAction();
             if(outOfActionsThisTurn && outOfMovementThisTurn) OnCompleteTurn(this);
-            CursorController.Instance.UnsetSelectedClickable();
         }
     }
 
@@ -172,9 +170,8 @@ public class IUnit : MonoBehaviour
 
     public virtual IEnumerator UseUnitActionCo(IUnit target, CombatAction action)
     {
-        CursorController.Instance.canUnset = false;
-
         //if the action is a melee attack, move the ally before attacking
+        CombatManager.Instance.canEndTurn = false;
         if(action is MeleeAttack)
         {
             List<Node> path = BattleGrid.Instance.pathFinder.FindPath(tileXPos, tileYPos, target.tileXPos, target.tileYPos);
@@ -188,9 +185,8 @@ public class IUnit : MonoBehaviour
         unitActions[CurrentAction].Act(this, target);
         OnAct(this);
 
-        CursorController.Instance.canUnset = true;
-
         StopCoroutine(UseUnitActionCo(target, action));
+        CombatManager.Instance.canEndTurn = true;
     }
 
     public delegate void OnActDelegate(IUnit unit);
@@ -199,8 +195,7 @@ public class IUnit : MonoBehaviour
     #region Movement
     public virtual IEnumerator MoveUnit(Vector2 newPosition, int spentMovement, float movementDuration = 1f)
     {
-        CursorController.Instance.canUnset = false;
-        
+        CombatManager.Instance.canEndTurn = false;
         float duration = (1-Mathf.InverseLerp(1,0, transform.position.x));
         StopAllCoroutines();
         StartMovementAnimation(newPosition);
@@ -213,7 +208,7 @@ public class IUnit : MonoBehaviour
             OnEndMoveUnit(spentMovement);
         }
 
-        CursorController.Instance.canUnset = true;
+        CombatManager.Instance.canEndTurn = true;
         StopCoroutine(MoveUnit(newPosition, spentMovement, movementDuration));
     }
 
@@ -224,8 +219,7 @@ public class IUnit : MonoBehaviour
 
     protected IEnumerator MoveUnitCo(List<Node> path, float movementDuration = .2f)
     {
-        CursorController.Instance.canUnset = false;
-
+        CombatManager.Instance.canEndTurn = false;
         foreach(Node node in path)
         {
             CombatTile destination = node.GetTile();
@@ -241,7 +235,7 @@ public class IUnit : MonoBehaviour
         //Debug.Log("moved");
         OnEndMoveUnit(path.Count);
         CombatCameraMovement.Instance.MoveCamera(transform.position);
-        CursorController.Instance.canUnset = true;
+        CombatManager.Instance.canEndTurn = true;
         StopCoroutine(MoveUnitCo(path, movementDuration));
     }
 

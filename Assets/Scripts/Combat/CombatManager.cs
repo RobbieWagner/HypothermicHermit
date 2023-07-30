@@ -21,6 +21,7 @@ public class CombatManager : MonoBehaviour
     [SerializeField] public Canvas gridWorldCanvas;
 
     [HideInInspector] public bool inCombat;
+    [HideInInspector] public bool canEndTurn;
 
     private int combatPhase;
     public int CombatPhase
@@ -57,6 +58,7 @@ public class CombatManager : MonoBehaviour
 
         combatPhase = -1;
         inCombat = false;
+        canEndTurn = true;
     }
 
     private void ToggleCombat(int gameState)
@@ -73,6 +75,7 @@ public class CombatManager : MonoBehaviour
 
     private void CreateNewCombat()
     {
+        Manager.Instance.canPause = false;
         combatGO = Instantiate(combatPrefab.gameObject, transform.parent);
         OnCreateNewCombat();
     }

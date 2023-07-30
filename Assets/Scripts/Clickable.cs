@@ -56,7 +56,7 @@ public class Clickable : MonoBehaviour, IPointerEnterHandler, IPointerExitHandle
 
     public virtual void UnselectClickable()
     {
-        Debug.Log("unselected");
+        //Debug.Log("unselected");
     }
 
     public void UpdateClickableState()

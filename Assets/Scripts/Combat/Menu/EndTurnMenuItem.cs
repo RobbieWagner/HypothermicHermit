@@ -8,7 +8,9 @@ public class EndTurnMenuItem : MonoBehaviour
 
     public void OnSelectMenuItem()
     {
-        if(CombatManager.Instance.CombatPhase == (int) CombatPhaseEnum.ally && CursorController.Instance.selectedClickable == null)
+        if(CombatManager.Instance.CombatPhase == (int) CombatPhaseEnum.ally 
+           && CursorController.Instance.selectedClickable == null 
+           && CombatManager.Instance.canEndTurn)
         {
             Debug.Log("ending turn");
             foreach(IUnit unit in Combat.Instance.combatUnits)

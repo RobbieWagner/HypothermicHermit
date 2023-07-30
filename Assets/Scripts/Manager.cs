@@ -18,6 +18,7 @@ public class Manager : MonoBehaviour
     [SerializeField] public LayerMask playerLM;
 
     [HideInInspector] public bool pauseOnEscapePressed;
+    [HideInInspector] public bool canPause;
     [SerializeField] private List<PauseMenu> pauseMenus;
     [HideInInspector] public PauseMenu activePauseMenu;
 
@@ -57,6 +58,7 @@ public class Manager : MonoBehaviour
 
         pauseOnEscapePressed = true;
         activePauseMenu = pauseMenus[0];
+        canPause = true;
     }
 
     private void ChangePauseMenu(int state)
@@ -75,9 +77,9 @@ public class Manager : MonoBehaviour
     {
         OnEscapePressed();
 
-        if(pauseOnEscapePressed) 
+        if(pauseOnEscapePressed && canPause) 
         {
-            Debug.Log("pausing");
+            //Debug.Log("pausing");
             activePauseMenu.OnPause();
         }
 

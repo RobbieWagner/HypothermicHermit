@@ -59,7 +59,8 @@ public class CombatTile : Clickable
                 List<Node> path = BattleGrid.Instance.pathFinder.FindPath(allyClickable.unitComponent.tileXPos, allyClickable.unitComponent.tileYPos, x, y);
                 allyClickable.unitComponent.MoveUnit(path);
                 BattleGrid.Instance.DisableAllTileColliders();
-                //CursorController.Instance.UnsetSelectedClickable();
+                CursorController.Instance.UnsetSelectedClickable();
+                //Debug.Log("unselected");
                 Combat.Instance.DisableTargetClickables();
             }
         }

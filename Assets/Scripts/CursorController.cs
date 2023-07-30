@@ -24,8 +24,6 @@ public class CursorController : MonoBehaviour
 
     [SerializeField] public int restingCursorState;
 
-    [SerializeField] public bool canUnset;
-
     private int cursorState;
     public int CursorState
     {
@@ -65,8 +63,6 @@ public class CursorController : MonoBehaviour
         Cursor.visible = false;
 
         Manager.Instance.OnEscapePressed += UnsetSelectedClickable;
-
-        canUnset = true;
     }
 
     private void FixedUpdate() 
@@ -103,7 +99,7 @@ public class CursorController : MonoBehaviour
 
     public void UnsetSelectedClickable()
     {
-        if(selectedClickable != null && canUnset)
+        if(selectedClickable != null)
         {
             selectedClickable.UnselectClickable();
             selectedClickable = null;

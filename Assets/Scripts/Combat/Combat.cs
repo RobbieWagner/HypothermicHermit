@@ -81,10 +81,15 @@ public class Combat : MonoBehaviour
 
     private IEnumerator StartNewRound()
     {
+        Manager.Instance.canPause = false;
         RemoveDeadUnits();
+        CombatManager.Instance.canEndTurn = false;
 
         yield return StartCoroutine(CombatCameraMovement.Instance.MoveCameraCo(Player.Instance.transform.position));
 
+        Manager.Instance.canPause = true;
+        CombatManager.Instance.canEndTurn = true;
+        Manager.Instance.canPause = true;
         StopCoroutine(StartNewRound());
     }
 
@@ -132,6 +137,7 @@ public class Combat : MonoBehaviour
 
     public IEnumerator KillUnitCo(IUnit unit)
     {
+        CombatManager.Instance.canEndTurn = false;
         unit.IsDead = true;
         yield return null;
         if(CombatManager.Instance.CombatPhase == (int) CombatPhaseEnum.ally 
@@ -141,6 +147,7 @@ public class Combat : MonoBehaviour
             unit.OutOfMovementThisTurn = true;
         }
 
+        CombatManager.Instance.canEndTurn = true;
         StopCoroutine(KillUnitCo(unit));
     }
 
