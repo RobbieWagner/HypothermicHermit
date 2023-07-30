@@ -54,6 +54,11 @@ public class Clickable : MonoBehaviour, IPointerEnterHandler, IPointerExitHandle
         }
     }
 
+    public virtual void UnselectClickable()
+    {
+        Debug.Log("unselected");
+    }
+
     public void UpdateClickableState()
     {
         if(CursorController.Instance.selectedClickable == null) CursorController.Instance.CursorState = cursorState;

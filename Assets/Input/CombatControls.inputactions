@@ -4,30 +4,8 @@
         {
             "name": "Combat",
             "id": "c75aad76-46a9-450f-9149-542cb5f29a58",
-            "actions": [
-                {
-                    "name": "StopCombat",
-                    "type": "Button",
-                    "id": "1909d215-7b36-4d4f-a53a-b4f3c7b28f57",
-                    "expectedControlType": "Button",
-                    "processors": "",
-                    "interactions": "",
-                    "initialStateCheck": false
-                }
-            ],
-            "bindings": [
-                {
-                    "name": "",
-                    "id": "d98d3a37-a15b-4d0e-b340-99b093762e58",
-                    "path": "<Keyboard>/escape",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "",
-                    "action": "StopCombat",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                }
-            ]
+            "actions": [],
+            "bindings": []
         }
     ],
     "controlSchemes": []

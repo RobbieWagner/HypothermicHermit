@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 public enum GameStateEnum
 {
@@ -15,6 +16,10 @@ public class Manager : MonoBehaviour
     [SerializeField] public float enemyNoticeRange;
     [SerializeField] public LayerMask unitLM;
     [SerializeField] public LayerMask playerLM;
+
+    [HideInInspector] public bool pauseOnEscapePressed;
+    [SerializeField] private List<PauseMenu> pauseMenus;
+    [HideInInspector] public PauseMenu activePauseMenu;
 
     private int gameState;
     public int GameState
@@ -33,7 +38,7 @@ public class Manager : MonoBehaviour
     }
 
     public delegate void OnGameStateChangeDelegate(int state);
-    public event OnGameStateChangeDelegate OnGameStateChange;
+    public event OnGameStateChangeDelegate OnGameStateChange = delegate {};
 
     public static Manager Instance {get; private set;}
     private void Awake() 
@@ -47,6 +52,38 @@ public class Manager : MonoBehaviour
             Instance = this; 
         } 
 
+        OnGameStateChange += ChangePauseMenu;
         GameState = (int) GameStateEnum.explore;
+
+        pauseOnEscapePressed = true;
+        activePauseMenu = pauseMenus[0];
     }
+
+    private void ChangePauseMenu(int state)
+    {
+        if(state < pauseMenus.Count)
+        {
+            activePauseMenu = pauseMenus[state];
+        }
+        else 
+        {
+            activePauseMenu = pauseMenus[pauseMenus.Count-1];
+        }
+    }
+
+    private void OnEscape()
+    {
+        OnEscapePressed();
+
+        if(pauseOnEscapePressed) 
+        {
+            Debug.Log("pausing");
+            activePauseMenu.OnPause();
+        }
+
+        pauseOnEscapePressed = true;
+    }
+
+    public delegate void OnEscapeButtonPressedDelegate();
+    public event OnEscapeButtonPressedDelegate OnEscapePressed = delegate {};
 }

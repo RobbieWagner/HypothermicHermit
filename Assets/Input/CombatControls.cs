@@ -26,37 +26,14 @@ public partial class @CombatControls : IInputActionCollection2, IDisposable
         {
             ""name"": ""Combat"",
             ""id"": ""c75aad76-46a9-450f-9149-542cb5f29a58"",
-            ""actions"": [
-                {
-                    ""name"": ""StopCombat"",
-                    ""type"": ""Button"",
-                    ""id"": ""1909d215-7b36-4d4f-a53a-b4f3c7b28f57"",
-                    ""expectedControlType"": ""Button"",
-                    ""processors"": """",
-                    ""interactions"": """",
-                    ""initialStateCheck"": false
-                }
-            ],
-            ""bindings"": [
-                {
-                    ""name"": """",
-                    ""id"": ""d98d3a37-a15b-4d0e-b340-99b093762e58"",
-                    ""path"": ""<Keyboard>/escape"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""StopCombat"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                }
-            ]
+            ""actions"": [],
+            ""bindings"": []
         }
     ],
     ""controlSchemes"": []
 }");
         // Combat
         m_Combat = asset.FindActionMap("Combat", throwIfNotFound: true);
-        m_Combat_StopCombat = m_Combat.FindAction("StopCombat", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -116,12 +93,10 @@ public partial class @CombatControls : IInputActionCollection2, IDisposable
     // Combat
     private readonly InputActionMap m_Combat;
     private ICombatActions m_CombatActionsCallbackInterface;
-    private readonly InputAction m_Combat_StopCombat;
     public struct CombatActions
     {
         private @CombatControls m_Wrapper;
         public CombatActions(@CombatControls wrapper) { m_Wrapper = wrapper; }
-        public InputAction @StopCombat => m_Wrapper.m_Combat_StopCombat;
         public InputActionMap Get() { return m_Wrapper.m_Combat; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -131,22 +106,15 @@ public partial class @CombatControls : IInputActionCollection2, IDisposable
         {
             if (m_Wrapper.m_CombatActionsCallbackInterface != null)
             {
-                @StopCombat.started -= m_Wrapper.m_CombatActionsCallbackInterface.OnStopCombat;
-                @StopCombat.performed -= m_Wrapper.m_CombatActionsCallbackInterface.OnStopCombat;
-                @StopCombat.canceled -= m_Wrapper.m_CombatActionsCallbackInterface.OnStopCombat;
             }
             m_Wrapper.m_CombatActionsCallbackInterface = instance;
             if (instance != null)
             {
-                @StopCombat.started += instance.OnStopCombat;
-                @StopCombat.performed += instance.OnStopCombat;
-                @StopCombat.canceled += instance.OnStopCombat;
             }
         }
     }
     public CombatActions @Combat => new CombatActions(this);
     public interface ICombatActions
     {
-        void OnStopCombat(InputAction.CallbackContext context);
     }
 }

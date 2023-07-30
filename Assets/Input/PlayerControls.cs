@@ -62,6 +62,15 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Escape"",
+                    ""type"": ""Button"",
+                    ""id"": ""b8796cb5-3038-4430-b564-e62e7a460473"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -229,6 +238,17 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
                     ""action"": ""ActionSelectionDown"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""fb4d41da-7fe5-409a-aac7-53a1e5ccc088"",
+                    ""path"": ""<Keyboard>/escape"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Escape"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -241,6 +261,7 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
         m_Movement_Run = m_Movement.FindAction("Run", throwIfNotFound: true);
         m_Movement_ActionSelectionUp = m_Movement.FindAction("ActionSelectionUp", throwIfNotFound: true);
         m_Movement_ActionSelectionDown = m_Movement.FindAction("ActionSelectionDown", throwIfNotFound: true);
+        m_Movement_Escape = m_Movement.FindAction("Escape", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -304,6 +325,7 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
     private readonly InputAction m_Movement_Run;
     private readonly InputAction m_Movement_ActionSelectionUp;
     private readonly InputAction m_Movement_ActionSelectionDown;
+    private readonly InputAction m_Movement_Escape;
     public struct MovementActions
     {
         private @PlayerControls m_Wrapper;
@@ -312,6 +334,7 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
         public InputAction @Run => m_Wrapper.m_Movement_Run;
         public InputAction @ActionSelectionUp => m_Wrapper.m_Movement_ActionSelectionUp;
         public InputAction @ActionSelectionDown => m_Wrapper.m_Movement_ActionSelectionDown;
+        public InputAction @Escape => m_Wrapper.m_Movement_Escape;
         public InputActionMap Get() { return m_Wrapper.m_Movement; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -333,6 +356,9 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
                 @ActionSelectionDown.started -= m_Wrapper.m_MovementActionsCallbackInterface.OnActionSelectionDown;
                 @ActionSelectionDown.performed -= m_Wrapper.m_MovementActionsCallbackInterface.OnActionSelectionDown;
                 @ActionSelectionDown.canceled -= m_Wrapper.m_MovementActionsCallbackInterface.OnActionSelectionDown;
+                @Escape.started -= m_Wrapper.m_MovementActionsCallbackInterface.OnEscape;
+                @Escape.performed -= m_Wrapper.m_MovementActionsCallbackInterface.OnEscape;
+                @Escape.canceled -= m_Wrapper.m_MovementActionsCallbackInterface.OnEscape;
             }
             m_Wrapper.m_MovementActionsCallbackInterface = instance;
             if (instance != null)
@@ -349,6 +375,9 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
                 @ActionSelectionDown.started += instance.OnActionSelectionDown;
                 @ActionSelectionDown.performed += instance.OnActionSelectionDown;
                 @ActionSelectionDown.canceled += instance.OnActionSelectionDown;
+                @Escape.started += instance.OnEscape;
+                @Escape.performed += instance.OnEscape;
+                @Escape.canceled += instance.OnEscape;
             }
         }
     }
@@ -359,5 +388,6 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
         void OnRun(InputAction.CallbackContext context);
         void OnActionSelectionUp(InputAction.CallbackContext context);
         void OnActionSelectionDown(InputAction.CallbackContext context);
+        void OnEscape(InputAction.CallbackContext context);
     }
 }

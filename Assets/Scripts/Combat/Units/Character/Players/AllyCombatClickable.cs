@@ -119,4 +119,15 @@ public class AllyCombatClickable : Clickable
             }
         }
     }
+
+    public override void UnselectClickable()
+    {
+        BattleGrid.Instance.DisableAllTileColliders();
+        Combat.Instance.DisableTargetClickables();
+        CombatHUD.Instance.RemoveAllActionInformation();
+
+        ClickState = (int) clickStateEnum.enabled;
+        CursorController.Instance.RemoveClickable(this); 
+        base.UnselectClickable();
+    }
 }

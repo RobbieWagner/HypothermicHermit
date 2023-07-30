@@ -694,7 +694,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   canMove: 0
-  cameraSpeed: 5
+  cameraSpeed: 10
 --- !u!114 &891950290476919985
 MonoBehaviour:
   m_ObjectHideFlags: 0
